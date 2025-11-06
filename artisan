@@ -1,0 +1,201 @@
+const fs = require('fs');
+const path = require('path');
+const moment = require("moment");
+const readline = require('readline');
+
+const Func = require("./app/Func");
+
+// Function to capitalize the first letter of a string
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
+// Function to prompt for confirmation
+function promptConfirmation() {
+    return new Promise((resolve, reject) => {
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        rl.question('The file already exists. Do you want to rewrite it? (y/N) ', (answer) => {
+            rl.close();
+            resolve(answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes');
+        });
+    });
+}
+
+// Function to generate the controller file
+async function makeController(_controllerName) {
+
+    const controllerFileName = `${capitalizeFirstLetter(_controllerName)}Controller.js`;
+    const controllerFilePath = path.join(__dirname, 'app', 'controllers', controllerFileName);
+
+    // Read the DemoController file
+    const demoControllerFilePath = path.join(__dirname, 'template', 'DemoController.js');
+    const demoControllerContent = fs.readFileSync(demoControllerFilePath, 'utf8');
+
+    const now = new Date();
+    const formattedDate = moment(now).format("DD-MM-YYYY HH:mm:ss");
+
+    // Controller template
+    let controllerTemplate = `// Filename: ${controllerFileName} \n`;
+    controllerTemplate += `// Created time: ${formattedDate}\n\n`;
+    controllerTemplate += `${demoControllerContent}`;
+
+    // Check if the file already exists
+    if (fs.existsSync(controllerFilePath)) {
+        const shouldRewrite = await promptConfirmation();
+        if (shouldRewrite) {
+            // Rewrite the file
+            fs.writeFileSync(controllerFilePath, controllerTemplate);
+            console.log('')
+            console.log(`✔️  Controller '${controllerFileName}' created successfully 🤓`);
+        } else {
+            console.log('')
+            console.log(`❌ Not overwritten 😱`);
+        }
+    } else {
+        // Write the file
+        fs.writeFileSync(controllerFilePath, controllerTemplate);
+        console.log('')
+        console.log(`✔️  Controller '${controllerFileName}' created successfully 🤓`);
+    }
+}
+
+// Function to generate the Models file
+async function makeModels(_modelsName) {
+
+    const modelsFileName = `${_modelsName}.js`;
+    const modelsFilePath = path.join(__dirname, 'app', 'models', modelsFileName);
+
+    // Read the Models file
+    const demoModelsFilePath = path.join(__dirname, 'template', 'Models', 'T_Template.js');
+    const demoModelsContent = fs.readFileSync(demoModelsFilePath, 'utf8');
+
+    const now = new Date();
+    const formattedDate = moment(now).format("DD-MM-YYYY HH:mm:ss");
+
+    // Models template
+    let modelsTemplate = `// FileName: ${modelsFileName} \n`;
+    modelsTemplate += `// Created time: ${formattedDate}\n\n`;
+    modelsTemplate += `${demoModelsContent}`;
+
+    // Check if the file already exists
+    if (fs.existsSync(modelsFilePath)) {
+        const shouldRewrite = await promptConfirmation();
+        if (shouldRewrite) {
+            // Rewrite the file
+            fs.writeFileSync(modelsFilePath, modelsTemplate);
+            console.log('')
+            console.log(`✔️  Model '${modelsFileName}' created successfully 🤓`);
+        } else {
+            console.log('')
+            console.log(`❌ Not overwritten 😱`);
+        }
+    } else {
+        // Write the file
+        fs.writeFileSync(modelsFilePath, modelsTemplate);
+        console.log('')
+        console.log(`✔️  Models '${modelsFileName}' created successfully 🤓`);
+    }
+
+    return modelsFilePath;
+}
+
+// Function to generate a unique key
+function generateKey() {
+    const genKeyAndIv = Func.generateKeyAndIV();
+
+    console.log('');
+    console.log("🔑 Generated Key");
+    console.log(`SECURITY_KEY=${genKeyAndIv.key}`);
+    console.log(`SECURITY_IV=${genKeyAndIv.iv}`);
+    console.log('');
+    return true;
+}
+
+// Command-line argument parsing
+const args = process.argv.slice(2);
+const command = args[0];
+const fileName = args[1];
+
+// Remove "Controller"
+const ShotName = fileName?.replace(/controller$/i, '');
+
+if (!command.startsWith('-make:') && !command.startsWith('-mk:') && command !== 'generatekey' && command !== 'genkey') {
+    console.error('Invalid command in artisan.js');
+    return;
+}
+
+// Split the command
+const splitArray = command
+    .replace('-make:', '')
+    .replace('-mk:', '');
+
+// console.log(splitArray);
+
+// Process each character asynchronously
+(async () => {
+    // สร้าง Key And IV
+    if (splitArray == 'generatekey' || splitArray == 'genkey') {
+        generateKey();
+        return;
+    }
+
+    for (const character of splitArray) {
+        // console.log(character); // Output: m, v, c
+        switch (character) {
+            case 'm':
+                if (!fileName) {
+                    console.error('Controller name is required.');
+                    return;
+                }
+                const pathModel = await makeModels(fileName);
+                console.log('');
+                console.log(`📚 Path Model: ${pathModel}`);
+                console.log('');
+                break;
+            case 'v':
+                if (!fileName) {
+                    console.error('Controller name is required.');
+                    return;
+                }
+                // console.log("Make views");
+                break;
+            case 'c':
+                if (!fileName) {
+                    console.error('Controller name is required.');
+                    return;
+                }
+                await makeController(fileName);
+                console.log('');
+                console.log('📂 routes: user.js');
+                console.log(`const ${capitalizeFirstLetter(ShotName)}Controller = require('../app/controllers/${capitalizeFirstLetter(ShotName)}Controller');\n`);
+
+                console.log(`/*-------- ${capitalizeFirstLetter(ShotName)}: ${capitalizeFirstLetter(ShotName)}Controller -------- */`);
+                // console.log('');
+                // console.log('// >> ดึงข้อมูลทั้งหมด');
+                console.log(`// router.get('/${ShotName.toLowerCase()}', usersAuth, \n//   authorize(${capitalizeFirstLetter(ShotName)}Controller.name, 'read'), \n//   ${capitalizeFirstLetter(ShotName)}Controller.index);`);
+                // console.log('// >> ดึงข้อมูลด้วยคีย์');
+                // console.log(`// router.get('/${ShotName.toLowerCase()}/:${capitalizeFirstLetter(ShotName)}_id/show', usersAuth, ${capitalizeFirstLetter(ShotName)}Controller.show);`);
+
+                // console.log('// >> เพิ่มข้อมูล');
+                // console.log(`// router.get('/${ShotName.toLowerCase()}/create', usersAuth, ${capitalizeFirstLetter(ShotName)}Controller.create);`);
+                // console.log(`// router.post('/${ShotName.toLowerCase()}/store', usersAuth, tokenSubmit, ${capitalizeFirstLetter(ShotName)}Controller.store);`);
+
+                // console.log('// >> แก้ไขข้อมูล');
+                // console.log(`// router.get('/${ShotName.toLowerCase()}/:${capitalizeFirstLetter(ShotName)}_id/edit', usersAuth, ${capitalizeFirstLetter(ShotName)}Controller.edit);`);
+                // console.log(`// router.post('/${ShotName.toLowerCase()}/update', usersAuth, tokenSubmit, ${capitalizeFirstLetter(ShotName)}Controller.update);`);
+
+                // console.log('// >> ลบข้อมูล');
+                // console.log(`// router.get('/${ShotName.toLowerCase()}/:${capitalizeFirstLetter(ShotName)}_id/destroy', usersAuth, ${capitalizeFirstLetter(ShotName)}Controller.destroy);`);
+                // console.log('');
+                console.log(`/*-------- End${capitalizeFirstLetter(ShotName)}: ${capitalizeFirstLetter(ShotName)}Controller -------- */`);
+                console.log('');
+                break;
+            default:
+                console.error('Invalid command in artisan.js');
+        }
+    }
+})();

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Accessroles.create</title>
+  <%- include('../../Layout/tagHead') %>
+
+  <style>
+    .table.table-flush-spacing thead tr>td:first-child,
+    .table.table-flush-spacing tbody tr>td:first-child {
+      padding-left: 27px;
+    }
+
+    .scroll-table thead {
+      text-align: left;
+      top: -1px;
+      position: sticky;
+      z-index: 10;
+    }
+
+    .scroll-table {
+      width: 100%;
+      max-height: 330px;
+      overflow: auto;
+      border: 1px solid #cccccc80;
+    }
+
+    .dark-layout .scroll-table {
+      border: 1px solid #404656;
+    }
+  </style>
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include('../../Layout/appheader', { Menuname: "_accessroles" }) %>
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Main Menu-->
+  <%- include('../../Layout/appmenu', { Menuname: "_accessrolescreate" }) %>
+  <!-- END: Main Menu-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+      <%- include('../../Layout/appbreadcrumb', { Menuname: "_accessroles=/user/accessroles, _accessrolescreate" }) %>
+
+
+      <div class="content-body">
+
+        <!-- Striped rows start -->
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header border-bottom py-1">
+                <h4 class="card-title" data-language="_accessrolescreate">
+                  <!-- เพิ่มข้อมูลกลุ่มสมาชิก -->
+                </h4>
+                <a type="button" href="/user/accessroles" class="btn btn-primary waves-effect round">
+                  <!-- <i data-feather='arrow-left-circle'></i> -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 8 8 12 12 16"></polyline>
+                    <line x1="16" y1="12" x2="8" y2="12"></line>
+                  </svg>
+                  <span data-language="_back">
+                    <%= translat._back %>
+                    <!-- ย้อนกลับ -->
+                  </span>
+                </a>
+              </div>
+
+              <!-- Add role form -->
+              <form class="validate-form" id="addRoleForm">
+                <div class="card-body pt-1">
+
+                  <input type="hidden" class="form-control" id="_csrfToken" value="<%- csrfToken %>">
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 mb-1">
+                      <label class="form-label required-field" for="new_description" data-language="_roles_name">
+                        <!-- ชื่อกลุ่ม -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control" id="new_description" name="new_description" autocomplete="off" data-language-placeholder="_enter_roles_name" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 my-1">
+                      <div class="table-responsive">
+                        <div class="scroll-table">
+                          <table class="table table-flush-spacing table-striped table-hover mb-0 dataTable">
+                            <thead>
+                              <tr>
+                                <th style="width: 20%;" class="text-nowrap fw-bolder">
+                                  <label class="form-check-label noselect" data-language="_accesspermissions">
+                                    <!-- รายชื่อเมนู -->
+                                  </label>
+                                  <span data-bs-toggle="tooltip" data-bs-placement="top" title="อนุญาตให้เข้าถึงระบบได้อย่างเต็มที่">
+                                    <i data-feather="info"></i>
+                                  </span>
+                                </th>
+                                <th style="width: 50%;" class="text-nowrap fw-bolder">
+                                  <label class="form-check-label noselect" data-language="_permission_controller">
+                                    <!-- คอนโทรลเลอร์ -->
+                                  </label>
+                                </th>
+                                <th class="ps-25">
+                                  <div class="form-check">
+                                    <input class="form-check-input selectAll pointer" type="checkbox" data-group="accessroles_create" id="selectAll" />
+                                    <label style="padding-top: 0.1rem;" class="form-check-label noselect" for="selectAll" data-language="_select_all">
+                                      <!-- เลือกทั้งหมด -->
+                                    </label>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody data-bodygroup="accessroles_create">
+
+                              <% prmissions.forEach((prmission, index) => { %>
+                              <tr>
+                                <td class="text-nowrap fw-bolder">[<%= (prmission?.prefix == 'F'? 'F':'R') %>-<%= prmission?.Permissions_id %>] <%= prmission?.name %></td>
+                                <td class="text-nowrap fw-bolder"><%= prmission?.controller %></td>
+                                <td id="crudgroup_<%= prmission?.Permissions_id %>">
+                                  <div class="d-flex">
+                                    <div class="form-check me-3 me-lg-5">
+                                      <input class="form-check-input pointer" type="checkbox" data-type="Read" id="Read_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" <%= (prmission?.read? '':'disabled') %> />
+                                      <label class="form-check-label noselect" for="Read_<%= prmission?.Permissions_id %>" data-language="_read">
+                                        <!-- อ่าน -->
+                                      </label>
+                                    </div>
+                                    <div class="form-check me-3 me-lg-5">
+                                      <input class="form-check-input pointer" type="checkbox" data-type="Update" id="Update_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" <%= (prmission?.update? '':'disabled') %> />
+                                      <label class="form-check-label noselect" for="Update_<%= prmission?.Permissions_id %>" data-language="_update">
+                                        <!-- แก้ไข -->
+                                      </label>
+                                    </div>
+                                    <div class="form-check me-3 me-lg-5">
+                                      <input class="form-check-input pointer" type="checkbox" data-type="Create" id="Create_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" <%= (prmission?.create? '':'disabled') %> />
+                                      <label class="form-check-label noselect" for="Create_<%= prmission?.Permissions_id %>" data-language="_create">
+                                        <!-- สร้าง -->
+                                      </label>
+                                    </div>
+                                    <div class="form-check me-3 me-lg-5">
+                                      <input class="form-check-input pointer" type="checkbox" data-type="Delete" id="Delete_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" <%= (prmission?.delete? '':'disabled') %> />
+                                      <label class="form-check-label noselect" for="Delete_<%= prmission?.Permissions_id %>" data-language="_delete">
+                                        <!-- ลบ -->
+                                      </label>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                              <% }); %>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div>
+                      <!-- Permission table -->
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 my-1">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="corePermission" checked disabled>
+                        <label class="form-check-label" for="corePermission" data-language="_roles_core">
+                          <!-- ตั้งเป็นกลุ่มหลักระบบ -->
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="submit" id="btnDisabled" class="btn btn-primary me-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                      <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span data-language="_save_changes"></span>
+                    <!-- Save changes -->
+                  </button>
+                  <button type="reset" class="btn btn-outline-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rotate-ccw">
+                      <polyline points="1 4 1 10 7 10"></polyline>
+                      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    <span data-language="_discard"></span>
+                    <!-- Discard -->
+                  </button>
+                </div>
+              </form>
+              <!--/ Add role form -->
+
+            </div>
+          </div>
+        </div>
+        <!-- Striped rows end -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- END: Content-->
+  <!-- <div class="sidenav-overlay"></div> -->
+  <!-- <div class="drag-target"></div> -->
+  <!-- BEGIN: Footer-->
+  <%- include('../../Layout/appfooter') %>
+
+  <%- include('../../Layout/scriptFooter') %>
+
+  <!-- BEGIN: Page JS-->
+  <script src="/app-scriptPage/accessroles/page-user-accessroles.create.js"></script>
+  <script src="/app-validateForm/accessroles/page-user-accessroles.create.js"></script>
+  <!-- END: Page JS-->
+
+  <!-- BEGIN: Page JS-->
+  <script src="/app-assets/js/scripts/pages/modal-add-role.js"></script>
+  <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

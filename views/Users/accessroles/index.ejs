@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Accessroles</title>
+  <%- include('../../Layout/tagHead') %>
+
+  <style>
+    .table.table-flush-spacing thead tr>td:first-child,
+    .table.table-flush-spacing tbody tr>td:first-child {
+      padding-left: 27px;
+    }
+
+    .scroll-table thead {
+      text-align: left;
+      top: -1px;
+      position: sticky;
+      z-index: 10;
+    }
+
+    .scroll-table {
+      width: 100%;
+      max-height: 330px;
+      overflow: auto;
+      border: 1px solid #cccccc80;
+    }
+
+    .dark-layout .scroll-table {
+      border: 1px solid #404656;
+    }
+  </style>
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include('../../Layout/appheader', { Menuname: "_accessroles" }) %>
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Main Menu-->
+  <%- include('../../Layout/appmenu', { Menuname: "_accessroles" }) %>
+  <!-- END: Main Menu-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+      <%- include('../../Layout/appbreadcrumb', { Menuname: "_accessroles" }) %>
+
+      <div class="content-body">
+
+
+        <div class="row mb-2 mt-1">
+          <div class="col-6">
+            <h3 data-language="_accessroles">
+              <!-- จัดการกลุ่มสมาชิก -->
+            </h3>
+          </div>
+          <div class="col-6 d-flex justify-content-end">
+
+            <% if (use?.permission?.[controllerName]?.create) { %>
+            <a type="button" href="/user/accessroles/create" class="btn btn-primary waves-effect round">
+              <!-- <i data-feather='plus-square'></i> -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+              <span data-language="_accessrolescreate">
+                <%= translat._accessrolescreate %>
+                <!-- เพิ่มข้อมูลกลุ่ม -->
+              </span>
+            </a>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- Role cards -->
+        <div class="row">
+
+          <% rolesCore.forEach(roleCore => { %>
+          <div class="col-xl-4 col-lg-6 col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <!-- แสดงผลข้อมูล Admin -->
+                <% if ([1].includes(use.priority)) { %>
+                <div class="d-flex justify-content-between mb-1 pb-25">
+                  <span data-language="_roles_members" data-string="<%= roleCore?.T_Users?.length %>">
+                    <!-- สมาชิก x คน -->
+                  </span>
+                  <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
+                    <% roleCore?.T_Users?.forEach(roleCoreUser => { %>
+
+                    <% if (roleCoreUser?.Usersrole_id >= 3) { %>
+                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="<%= roleCoreUser?.username %>" class="avatar avatar-sm pull-up">
+                      <img class="rounded-circle" src="<%= roleCoreUser?.T_Employee?.profile %>" onerror="this.src='/app-assets/images/portrait/small/avatar.png';" alt="Avatar" />
+                    </li>
+                    <% }else{ %>
+                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="<%= roleCoreUser?.username %>" class="avatar avatar-sm pull-up">
+                      <img style="background-color: #ffffff;" class="rounded-circle" src="<%= roleCoreUser?.T_Company?.profile %>" onerror="this.src='/app-assets/images/portrait/small/avatar.png';" alt="Avatar" />
+                    </li>
+                    <% } %>
+
+                    <% }); %>
+                  </ul>
+                </div>
+                <% } %>
+                <div class="d-flex justify-content-between align-items-end">
+                  <div class="role-heading">
+                    <h4 class="fw-bolder">
+                      <label id="title_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>"><%= roleCore.description %></label>
+                      <% switch(roleCore.priority) { 
+                          case 2: <!-- แสดงผลข้อมูล Admin --> %>
+                      <h6 style="font-size: 14px;"><code>Company Admin Role</code></h6>
+                      <% break;
+                          case 3: <!-- แสดงผลข้อมูล Company and Admin --> %>
+                      <h6 style="font-size: 14px;"><code>Core Role</code></h6>
+                      <% break;
+                          case 4: <!-- แสดงผลข้อมูล Company and Admin --> %>
+                      <h6 style="font-size: 14px;"><code>Role <%= ([2].includes(use.priority) ? ``:`[${roleCore?.createdBy?.name}]`) %></code></h6>
+                      <% break; } %>
+                    </h4>
+
+                  </div>
+
+
+                  <!-- แสดงผลข้อมูล Admin -->
+                  <% if ([1].includes(use.priority)) { %>
+                  <a href="javascript:;" class="role-edit-modal" data-bs-toggle="modal" data-bs-target="#editRoleModal_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>">
+                    <small class="fw-bolder" data-language="_roles_edit_group">
+                      <!-- แก้ไขข้อมูลกลุ่ม -->
+                    </small>
+                  </a>
+                  <% } %>
+
+                  <!-- แสดงผลข้อมูล Company -->
+                  <% if ( [2].includes(use.priority) ) { %>
+
+                  <% switch(roleCore.priority) { 
+                          case 3: <!-- แสดงผลข้อมูล Company --> %>
+                  <a href="javascript:;" class="role-edit-modal" data-bs-toggle="modal" data-bs-target="#editRoleModal_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>">
+                    <small class="fw-bolder" data-language="_roles_view_group">
+                      <!-- ข้อมูลกลุ่ม -->
+                    </small>
+                  </a>
+                  <% break; } %>
+
+                  <% } %>
+
+                  <!-- <a href="javascript:void(0);" class="text-body">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy font-medium-5">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  </a> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <% }); %>
+
+          <% if (rolesSub.length) { %>
+          <div class="divider divider-start mb-2">
+            <div class="divider-text">
+              <h4 data-language="_roles_companycreated">
+                <!-- สร้างโดยบริษัท -->
+              </h4>
+            </div>
+          </div>
+          <% } %>
+
+
+
+          <% rolesSub.forEach(roleSub => { %>
+          <div class="col-xl-4 col-lg-6 col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <!-- แสดงผลข้อมูล Admin -->
+                <% if ([1].includes(use.priority)) { %>
+                <!-- ปิดไว้ก่อน -->
+                <!-- <div class="d-flex justify-content-between mb-1 pb-25">
+                  <span data-language="_roles_members" data-string="<%= Math.floor(Math.random() * (10 - 4 + 1)) + 4 %>">
+                    สมาชิก x คน
+                  </span>
+                  <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
+                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="Vinnie Mostowy" class="avatar avatar-sm pull-up">
+                      <img class="rounded-circle" src="../../../app-assets/images/avatars/<%= Math.floor(Math.random() * 12) + 1 %>.png" alt="Avatar" />
+                    </li>
+                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="Allen Rieske" class="avatar avatar-sm pull-up">
+                      <img class="rounded-circle" src="../../../app-assets/images/avatars/<%= Math.floor(Math.random() * 12) + 1 %>.png" alt="Avatar" />
+                    </li>
+                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="Julee Rossignol" class="avatar avatar-sm pull-up">
+                      <img class="rounded-circle" src="../../../app-assets/images/avatars/<%= Math.floor(Math.random() * 12) + 1 %>.png" alt="Avatar" />
+                    </li>
+                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="Kaith D'souza" class="avatar avatar-sm pull-up">
+                      <img class="rounded-circle" src="../../../app-assets/images/avatars/<%= Math.floor(Math.random() * 12) + 1 %>.png" alt="Avatar" />
+                    </li>
+                  </ul>
+                </div> -->
+                <% } %>
+                <div class="d-flex justify-content-between align-items-end">
+                  <div class="role-heading">
+                    <h4 class="fw-bolder">
+                      <label id="title_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>"><%= roleSub.description %></label>
+                      <% switch(roleSub.priority) { 
+                            case 2: <!-- แสดงผลข้อมูล Admin --> %>
+                      <h6 style="font-size: 14px;"><code>Company Admin Role</code></h6>
+                      <% break;
+                            case 3: <!-- แสดงผลข้อมูล Company and Admin --> %>
+                      <h6 style="font-size: 14px;"><code>Core Role</code></h6>
+                      <% break;
+                            case 4: <!-- แสดงผลข้อมูล Company and Admin --> %>
+                      <h6 style="font-size: 14px;"><code>Company Role <%= ([2].includes(use.priority) ? ``:`[${roleSub?.createdBy?.name}]`) %></code></h6>
+                      <% break; } %>
+                    </h4>
+                  </div>
+
+
+                  <!-- แสดงผลข้อมูล Admin -->
+                  <% if ([1].includes(use.priority)) { %>
+                  <a href="javascript:;" class="role-edit-modal" data-bs-toggle="modal" data-bs-target="#editRoleModal_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>">
+                    <small class="fw-bolder" data-language="_roles_edit_group">
+                      <!-- แก้ไขข้อมูลกลุ่ม -->
+                    </small>
+                  </a>
+                  <% } %>
+
+                  <!-- แสดงผลข้อมูล Company -->
+                  <% if ( [2].includes(use.priority) ) { %>
+                  <% switch(roleSub.priority) { 
+                            case 3: <!-- แสดงผลข้อมูล Company --> %>
+                  <a href="javascript:;" class="role-edit-modal" data-bs-toggle="modal" data-bs-target="#editRoleModal_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>">
+                    <small class="fw-bolder" data-language="_roles_view_group">
+                      <!-- ข้อมูลกลุ่ม -->
+                    </small>
+                  </a>
+                  <% break;
+                            case 4: <!-- แสดงผลข้อมูล Company --> %>
+                  <% if (use?.permission?.[controllerName]?.update) { %>
+                  <a href="javascript:;" class="role-edit-modal" data-bs-toggle="modal" data-bs-target="#editRoleModal_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>">
+                    <small class="fw-bolder" data-language="_roles_edit_group">
+                      <!-- แก้ไขข้อมูลกลุ่ม -->
+                    </small>
+                  </a>
+                  <% } %>
+                  <% break; } %>
+                  <% } %>
+
+                  <!-- <a href="javascript:void(0);" class="text-body">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy font-medium-5">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  </a> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <% }); %>
+
+        </div>
+        <!--/ Role cards -->
+
+        <% rolesCore.forEach(roleCore => { %>
+        <!-- Edit Role Modal -->
+        <div class="modal fade text-start" id="editRoleModal_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" tabindex="-1" aria-labelledby="ModalLabel17" aria-hidden="true" data-bs-backdrop="static">
+          <div class="modal-dialog modal-xl modal-dialog-centered modal-add-new-role">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="ModalLabel17" data-language="_roles_edit_group">
+                  <!-- แก้ไขข้อมูลกลุ่ม -->
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <!-- Add role form -->
+                <form class="validate-form row" onsubmit="return false" id="<%= encryptText(roleCore?.Usersrole_id?.toString()) %>">
+
+                  <input type="hidden" class="usersroleId" value="<%= encryptText(roleCore?.Usersrole_id?.toString()) %>">
+                  <div class="modal-body">
+                    <div class="row">
+                      <div class="col-12 col-sm-12 mb-1">
+                        <label class="form-label <%= ([2].includes(use.priority) && roleCore.core ? '':'required-field') %>" for="new_description_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" data-language="_roles_name">
+                          <!-- ชื่อกลุ่ม -->
+                        </label>
+                        <div class="input-group input-group-merge">
+                          <input type="text" value="<%= roleCore.description %>" class="form-control" id="new_description_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" name="new_description_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" autocomplete="off" data-language-placeholder="_enter_roles_name" <%= ([2].includes(use.priority) && roleCore.core ? 'readonly':'') %> required>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-12 col-sm-12 my-1">
+                        <!-- Permission table -->
+                        <div class="table-responsive">
+                          <div class="scroll-table">
+                            <table class="table table-flush-spacing table-striped table-hover mb-0 dataTable">
+                              <thead>
+                                <tr>
+                                  <th style="width: 20%;" class="text-nowrap fw-bolder">
+                                    <label class="form-check-label noselect" data-language="_accesspermissions">
+                                      <!-- รายชื่อเมนู -->
+                                    </label>
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="อนุญาตให้เข้าถึงระบบได้อย่างเต็มที่">
+                                      <i data-feather="info"></i>
+                                    </span>
+                                  </th>
+                                  <th style="width: 50%;" class="text-nowrap fw-bolder">
+                                    <label class="form-check-label noselect" data-language="_permission_controller">
+                                      <!-- คอนโทรลเลอร์ -->
+                                    </label>
+                                  </th>
+
+                                  <th class="ps-25">
+                                    <!-- แสดงผลข้อมูล Admin -->
+                                    <% if ([1].includes(use.priority)) { %>
+                                    <div class="form-check">
+                                      <input class="form-check-input selectAll pointer" type="checkbox" data-group="accessroles_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" id="selectAll_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" />
+                                      <label style="padding-top: 0.1rem;" class="form-check-label noselect" for="selectAll_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" data-language="_select_all">
+                                        <!-- เลือกทั้งหมด -->
+                                      </label>
+                                    </div>
+                                    <% } %>
+
+                                    <!-- แสดงผลข้อมูล Company -->
+                                    <% if ( [2].includes(use.priority) ) { %>
+                                    <% switch(roleCore.priority) { 
+                                          case 3: <!-- แสดงผลข้อมูล Company --> %>
+                                    <!-- ไม่ต้องแสดง -->
+                                    <% break;
+                                          case 4: <!-- แสดงผลข้อมูล Company --> %>
+                                    <div class="form-check">
+                                      <input class="form-check-input selectAll pointer" type="checkbox" data-group="accessroles_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" id="selectAll_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" />
+                                      <label style="padding-top: 0.1rem;" class="form-check-label noselect" for="selectAll_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" data-language="_select_all">
+                                        <!-- เลือกทั้งหมด -->
+                                      </label>
+                                    </div>
+                                    <% break; } %>
+                                    <% } %>
+                                  </th>
+                                  <th style="width: 10%; text-align: center;" class="no-search" data-language="_permission_company_only">
+                                    <!-- เฉพาะบริษัท -->
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody data-bodygroup="accessroles_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>">
+                                <% roleCore.prmissions.forEach(prmission => { %>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">[<%= (prmission?.prefix == 'F'? 'F':'R') %>-<%= prmission?.Permissions_id %>] <%= prmission?.name %></td>
+                                  <td class="text-nowrap fw-bolder"><%= prmission?.controller %></td>
+                                  <td id="crudgroup_<%= prmission?.Permissions_id %>">
+                                    <!-- 
+                                    checkbox สีส้มคือ กรณีไม่ใช้โมดูลของบริษัท แล้วต้องการให้สิทธิไว้ กรณีต้องการสร้างกลุ่มเอง 
+                                    -->
+                                    <div class="d-flex">
+                                      <div class="form-check <%= prmission?.companyonly == false && [2].includes(roleCore.priority) ? 'form-check-warning' : '' %> me-3 me-lg-5">
+                                        <input <%= (prmission.checkedRead? 'checked':'') %> <%= (prmission?.disabledRead? 'disabled':'') %> class="form-check-input pointer" type="checkbox" data-type="Read" id="Read_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" />
+                                        <label class="form-check-label noselect" for="Read_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" data-language="_read">
+                                          <!-- อ่าน -->
+                                        </label>
+                                      </div>
+                                      <div class="form-check <%= prmission?.companyonly == false && [2].includes(roleCore.priority) ? 'form-check-warning' : '' %> me-3 me-lg-5">
+                                        <input <%= (prmission.checkedUpdate? 'checked':'') %> <%= (prmission?.disabledUpdate? 'disabled':'') %> class="form-check-input pointer" type="checkbox" data-type="Update" id="Update_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" />
+                                        <label class="form-check-label noselect" for="Update_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" data-language="_update">
+                                          <!-- แก้ไข -->
+                                        </label>
+                                      </div>
+                                      <div class="form-check <%= prmission?.companyonly == false && [2].includes(roleCore.priority) ? 'form-check-warning' : '' %> me-3 me-lg-5">
+                                        <input <%= (prmission.checkedCreate? 'checked':'') %> <%= (prmission?.disabledCreate? 'disabled':'') %> class="form-check-input pointer" type="checkbox" data-type="Create" id="Create_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" />
+                                        <label class="form-check-label noselect" for="Create_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" data-language="_create">
+                                          <!-- สร้าง -->
+                                        </label>
+                                      </div>
+                                      <div class="form-check <%= prmission?.companyonly == false && [2].includes(roleCore.priority) ? 'form-check-warning' : '' %> me-3 me-lg-5">
+                                        <input <%= (prmission.checkedDelete? 'checked':'') %> <%= (prmission?.disabledDelete? 'disabled':'') %> class="form-check-input pointer" type="checkbox" data-type="Delete" id="Delete_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" />
+                                        <label class="form-check-label noselect" for="Delete_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" data-language="_delete">
+                                          <!-- ลบ -->
+                                        </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td style="text-align: center;">
+                                    <div class="d-flex justify-content-center">
+                                      <div class="form-check form-check-secondary me-3 me-lg-1">
+                                        <input disabled class="form-check-input checked-opacity" type="checkbox" <%= (prmission?.companyonly? 'checked':'disabled') %> />
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <% }); %>
+                              </tbody>
+                            </table>
+                          </div>
+
+                        </div>
+                        <!-- Permission table -->
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <!-- แสดงผลข้อมูล Admin -->
+                    <% if ([1].includes(use.priority)) { %>
+                    <button type="submit" id="btnDisabled_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" class="btn btn-primary me-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                      </svg>
+                      <span data-language="_save_changes"></span>
+                      <!-- บันทึก -->
+                    </button>
+                    <% } %>
+
+                    <!-- แสดงผลข้อมูล Company -->
+                    <% if ( [2].includes(use.priority) ) { %>
+                    <% switch(roleCore.priority) { 
+                          case 3: <!-- แสดงผลข้อมูล Company --> %>
+                    <!-- ไม่ต้องแสดง -->
+                    <% break;
+                          case 4: <!-- แสดงผลข้อมูล Company --> %>
+                    <button type="submit" id="btnDisabled_<%= encryptText(roleCore?.Usersrole_id?.toString()) %>" class="btn btn-primary me-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                      </svg>
+                      <span data-language="_save_changes"></span>
+                      <!-- บันทึก -->
+                    </button>
+                    <% break; } %>
+                    <% } %>
+
+                    <button type="button" class="btn btn-outline-danger waves-effect waves-float waves-light" data-bs-dismiss="modal">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                      </svg>
+                      <span data-language="_discard"></span>
+                      <!-- ยกเลิก -->
+                    </button>
+                  </div>
+                </form>
+                <!--/ Add role form -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--/ Edit Role Modal -->
+        <% }); %>
+
+        <% rolesSub.forEach(roleSub => { %>
+        <!-- Edit Role Modal -->
+        <div class="modal fade text-start" id="editRoleModal_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" tabindex="-1" aria-labelledby="ModalLabel17" aria-hidden="true" data-bs-backdrop="static">
+          <div class="modal-dialog modal-xl modal-dialog-centered modal-add-new-role">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="ModalLabel17" data-language="_roles_edit_group">
+                  <!-- แก้ไขข้อมูลกลุ่ม -->
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <!-- Add role form -->
+                <form class="validate-form row" onsubmit="return false" id="<%= encryptText(roleSub?.Usersrole_id?.toString()) %>">
+
+                  <input type="hidden" class="usersroleId" value="<%= encryptText(roleSub?.Usersrole_id?.toString()) %>">
+                  <div class="modal-body">
+                    <div class="row">
+                      <div class="col-12 col-sm-12 mb-1">
+                        <label class="form-label <%= ([2].includes(use.priority) && roleSub.core ? '':'required-field') %>" for="new_description_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" data-language="_roles_name">
+                          <!-- ชื่อกลุ่ม -->
+                        </label>
+                        <div class="input-group input-group-merge">
+                          <input type="text" value="<%= roleSub.description %>" class="form-control" id="new_description_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" name="new_description_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" autocomplete="off" data-language-placeholder="_enter_roles_name" <%= ([2].includes(use.priority) && roleSub.core ? 'readonly':'') %> required>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-12 col-sm-12 my-1">
+                        <!-- Permission table -->
+                        <div class="table-responsive">
+                          <div class="scroll-table">
+                            <table class="table table-flush-spacing table-striped table-hover mb-0 dataTable">
+                              <thead>
+                                <tr>
+                                  <th style="width: 20%;" class="text-nowrap fw-bolder">
+                                    <label class="form-check-label noselect" data-language="_accesspermissions">
+                                      <!-- รายชื่อเมนู -->
+                                    </label>
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="อนุญาตให้เข้าถึงระบบได้อย่างเต็มที่">
+                                      <i data-feather="info"></i>
+                                    </span>
+                                  </th>
+                                  <th style="width: 50%;" class="text-nowrap fw-bolder">
+                                    <label class="form-check-label noselect" data-language="_permission_controller">
+                                      <!-- คอนโทรลเลอร์ -->
+                                    </label>
+                                  </th>
+
+                                  <th class="ps-25">
+                                    <!-- แสดงผลข้อมูล Admin -->
+                                    <% if ([1].includes(use.priority)) { %>
+                                    <div class="form-check">
+                                      <input class="form-check-input selectAll pointer" type="checkbox" data-group="accessroles_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" id="selectAll_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" />
+                                      <label style="padding-top: 0.1rem;" class="form-check-label noselect" for="selectAll_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" data-language="_select_all">
+                                        <!-- เลือกทั้งหมด -->
+                                      </label>
+                                    </div>
+                                    <% } %>
+
+                                    <!-- แสดงผลข้อมูล Company -->
+                                    <% if ( [2].includes(use.priority) ) { %>
+                                    <% switch(roleSub.priority) { 
+                                            case 3: <!-- แสดงผลข้อมูล Company --> %>
+                                    <!-- ไม่ต้องแสดง -->
+                                    <% break;
+                                            case 4: <!-- แสดงผลข้อมูล Company --> %>
+                                    <div class="form-check">
+                                      <input class="form-check-input selectAll pointer" type="checkbox" data-group="accessroles_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" id="selectAll_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" />
+                                      <label style="padding-top: 0.1rem;" class="form-check-label noselect" for="selectAll_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" data-language="_select_all">
+                                        <!-- เลือกทั้งหมด -->
+                                      </label>
+                                    </div>
+                                    <% break; } %>
+                                    <% } %>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody data-bodygroup="accessroles_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>">
+                                <% roleSub.prmissions.forEach(prmission => { %>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">[<%= (prmission?.prefix == 'F'? 'F':'R') %>-<%= prmission?.Permissions_id %>] <%= prmission?.name %></td>
+                                  <td class="text-nowrap fw-bolder"><%= prmission?.controller %></td>
+                                  <td id="crudgroup_<%= prmission?.Permissions_id %>">
+                                    <div class="d-flex">
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input <%= (prmission.checkedRead? 'checked':'') %> <%= (prmission?.disabledRead? 'disabled':'') %> class="form-check-input pointer" type="checkbox" data-type="Read" id="Read_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" />
+                                        <label class="form-check-label noselect" for="Read_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" data-language="_read">
+                                          <!-- อ่าน -->
+                                        </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input <%= (prmission.checkedUpdate? 'checked':'') %> <%= (prmission?.disabledUpdate? 'disabled':'') %> class="form-check-input pointer" type="checkbox" data-type="Update" id="Update_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" />
+                                        <label class="form-check-label noselect" for="Update_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" data-language="_update">
+                                          <!-- แก้ไข -->
+                                        </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input <%= (prmission.checkedCreate? 'checked':'') %> <%= (prmission?.disabledCreate? 'disabled':'') %> class="form-check-input pointer" type="checkbox" data-type="Create" id="Create_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" />
+                                        <label class="form-check-label noselect" for="Create_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" data-language="_create">
+                                          <!-- สร้าง -->
+                                        </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input <%= (prmission.checkedDelete? 'checked':'') %> <%= (prmission?.disabledDelete? 'disabled':'') %> class="form-check-input pointer" type="checkbox" data-type="Delete" id="Delete_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" name="<%= prmission?.Permissions_id %>" />
+                                        <label class="form-check-label noselect" for="Delete_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>_<%= prmission?.Permissions_id %>" data-language="_delete">
+                                          <!-- ลบ -->
+                                        </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <% }); %>
+                              </tbody>
+                            </table>
+                          </div>
+
+                        </div>
+                        <!-- Permission table -->
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <!-- แสดงผลข้อมูล Admin -->
+                    <% if ([1].includes(use.priority)) { %>
+                    <button type="submit" id="btnDisabled_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" class="btn btn-primary me-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                      </svg>
+                      <span data-language="_save_changes"></span>
+                      <!-- บันทึก -->
+                    </button>
+                    <% } %>
+
+                    <!-- แสดงผลข้อมูล Company -->
+                    <% if ( [2].includes(use.priority) ) { %>
+                    <% switch(roleSub.priority) { 
+                            case 3: <!-- แสดงผลข้อมูล Company --> %>
+                    <!-- ไม่ต้องแสดง -->
+                    <% break;
+                            case 4: <!-- แสดงผลข้อมูล Company --> %>
+
+                    <% if (use?.permission?.[controllerName]?.update) { %>
+                    <button type="submit" id="btnDisabled_<%= encryptText(roleSub?.Usersrole_id?.toString()) %>" class="btn btn-primary me-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                      </svg>
+                      <span data-language="_save_changes"></span>
+                      <!-- บันทึก -->
+                    </button>
+                    <% } %>
+
+                    <% break; } %>
+                    <% } %>
+
+                    <button type="button" class="btn btn-outline-danger waves-effect waves-float waves-light" data-bs-dismiss="modal">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                      </svg>
+                      <span data-language="_discard"></span>
+                      <!-- ยกเลิก -->
+                    </button>
+                  </div>
+                </form>
+                <!--/ Add role form -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--/ Edit Role Modal -->
+        <% }); %>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- END: Content-->
+  <!-- <div class="sidenav-overlay"></div> -->
+  <!-- <div class="drag-target"></div> -->
+  <!-- BEGIN: Footer-->
+  <%- include('../../Layout/appfooter') %>
+
+  <%- include('../../Layout/scriptFooter') %>
+
+  <!-- BEGIN: Page JS-->
+  <script src="../app-scriptPage/accessroles/page-user-accessroles.index.js"></script>
+  <script src="../app-validateForm/accessroles/page-user-accessroles.index.js"></script>
+
+  <script src="../app-assets/js/scripts/pages/modal-add-role.js"></script>
+  <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

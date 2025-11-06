@@ -1,0 +1,66 @@
+/*================================================================================
+	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+	Version: 2.0
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+.inline-flex {
+	font-size: 13px;
+	margin-left: 2em;
+	justify-content: left;
+	color: #ff9f43 !important;
+}
+
+#borderimgBarcode {
+	border: 5px solid transparent;
+	padding: 5px;
+	border-image: url('../app-assets/images/elements/border.png') 30 round;
+}
+
+.no-border {
+	border: 0;
+}
+
+.dataTables_scroll {
+	margin-bottom: 10px;
+	/* เพิ่มระยะห่างด้านล่างของส่วนแสดงผลหน้า */
+}
+
+.google-icon-wrapper {
+	width: 20px;
+	margin-right: 10px;
+	/* margin-bottom: 5px; */
+}
+
+.google-icon {
+	width: 100%;
+	height: auto;
+}
+
+.menu-option {
+	width: 250px !important;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.noselect {
+	-webkit-touch-callout: none; /* iOS Safari */
+	  -webkit-user-select: none; /* Safari */
+	   -khtml-user-select: none; /* Konqueror HTML */
+		 -moz-user-select: none; /* Old versions of Firefox */
+		  -ms-user-select: none; /* Internet Explorer/Edge */
+			  user-select: none; /* Non-prefixed version, currently
+									supported by Chrome, Edge, Opera and Firefox */
+}
+
+.checked-opacity:disabled {
+	opacity: 1;                /* Ensure full opacity */
+}

@@ -1,0 +1,9 @@
+{
+    "display": false,
+    "index": 0,
+    "code": "Example",
+    "title": "_example",
+    "icon": "/icons/survey.png",
+    "controller": "DemoController",
+    "url": ""
+}

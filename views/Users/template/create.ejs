@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Managecompanys.create</title>
+  <%- include(viewsRoot('/Layout/tagHead')) %>
+
+  <script src="/app-assets/vendors/js/forms/cleave/cleave.min.js"></script>
+  <script src="/app-assets/vendors/js/forms/cleave/addons/cleave-phone.th.js"></script>
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include(viewsRoot('/Layout/appheader'), { Menuname: "_managecustomers" }) %>
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Main Menu-->
+  <%- include(viewsRoot('/Layout/appmenu'), { Menuname: "_managecustomerscreate" }) %>
+  <!-- END: Main Menu-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+      <%- include(viewsRoot('/Layout/appbreadcrumb'), { Menuname: "_managecustomers=/user/managecustomers, _managecustomerscreate" }) %>
+
+
+      <div class="content-body">
+        <!-- Striped rows start -->
+        <div class="row">
+          <div class="col-12">
+
+            <div class="card">
+              <div class="card-header border-bottom py-1">
+                <h4 class="card-title" data-language="_managecustomerscreate">
+                  <!-- เพิ่มข้อมูล -->
+                </h4>
+                <a type="button" href="/user/managecustomers" class="btn btn-primary waves-effect round">
+                  <!-- <i data-feather='arrow-left-circle'></i> -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 8 8 12 12 16"></polyline>
+                    <line x1="16" y1="12" x2="8" y2="12"></line>
+                  </svg>
+                  <span data-language="_back">
+                    <%= translat._back %>
+                    <!-- ย้อนกลับ -->
+                  </span>
+                </a>
+              </div>
+
+              <!-- form -->
+              <form class="validate-form" id="managecompanyscreateForm">
+
+                <div class="card-body pt-1">
+
+                  <% if(messages.success){ %>
+                  <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">
+                      <i data-feather="check-circle" class="me-50"></i>
+                      <span data-language="_success_title">
+                        <!-- _error_title -->
+                      </span>
+                    </h4>
+                    <div class="alert-body">
+                      <ul class="ps-1 ms-25">
+                        <li data-language="<%= messages.success %>"></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <% } %>
+
+                  <% if(messages.error){ %>
+
+                  <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">
+                      <!-- <i data-feather="x-circle" class="me-50"></i> -->
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle me-50">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                      </svg>
+                      <span data-language="_error_title">
+                        <!-- _error_title -->
+                      </span>
+                    </h4>
+                    <div class="alert-body">
+                      <ul class="ps-1 ms-25">
+                        <% messages.error.forEach(message => { %>
+                        <li data-language="<%= message %>"></li>
+                        <% }) %>
+                      </ul>
+                    </div>
+                  </div>
+                  <% } %>
+
+                  <input type="hidden" class="form-control" id="_csrfToken" value="<%- csrfToken %>">
+
+                  <div class="row">
+                    <div class="col-12 col-sm-2 mb-1">
+                      <label class="form-label required-field" for="new_companyname" data-language="_customerid">
+                        <!-- รหัสลูกค้า -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control" id="new_companyname" name="new_companyname" data-language-placeholder="_enter_customer" required readonly />
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-4 mb-1">
+                      <label class="form-label required-field" for="copyname-to-clipboard" data-language="_customername">
+                        <!-- ชื่อลูกค้า -->
+                      </label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="new_customer" name="new_customer" data-language-placeholder="_enter_customer" aria-describedby="btn-customer" required readonly />
+                        <button type="button" class="btn btn-outline-primary" id="btn-customer" data-language="_search_customer">
+                          <!-- ค้นหาลูกค้า -->
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label" for="new_mail" data-language="_mail">
+                        <!-- อีเมล์ -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control" id="new_mail" name="new_mail" data-language-placeholder="_enter_mail" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label required-field" for="new_companyname" data-language="_primary_contactname">
+                        <!-- ชื่อผู้ติดต่อ -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control" id="new_companyname" name="new_companyname" data-language-placeholder="_enter_contactname" required />
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label required-field" for="new_companyphone" data-language="_primaryphone">
+                        <!-- เบอร์โทร -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control" id="new_companyphone" name="new_companyphone" data-language-placeholder="_enter_phone" required />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label" for="new_companyname" data-language="_backup_contactname">
+                        <!-- ชื่อผู้ติดต่อ -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control" id="new_companyname" name="new_companyname" data-language-placeholder="_enter_contactname" />
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label" for="new_companyphone" data-language="_backupphone">
+                        <!-- เบอร์โทร -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control" id="new_companyphone" name="new_companyphone" data-language-placeholder="_enter_phone" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 mb-1">
+                      <label class="form-label required-field" for="new_companyname" data-language="_addressdetails">
+                        <!-- รายละเอียดสถานที่ -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <textarea rows="4" cols="50" class="form-control" id="new_companyname" name="new_companyname" data-language-placeholder="_enter_details" required></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div id="errorTitle" class="col-12 col-sm-12 my-1" style="display: none;">
+                      <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle me-50">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                          </svg>
+                          <%- translat['_error_title'] %>
+                        </h4>
+                        <div class="alert-body" id="errorMessageContainer">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="modal-footer">
+                  <button type="submit" id="btnDisabled" class="btn btn-primary me-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                      <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span data-language="_save_changes"></span>
+                    <!-- Save changes -->
+                  </button>
+                  <button type="reset" class="btn btn-outline-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rotate-ccw">
+                      <polyline points="1 4 1 10 7 10"></polyline>
+                      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    <span data-language="_discard"></span>
+                    <!-- Discard -->
+                  </button>
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+        </div>
+        <!-- Striped rows end -->
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- END: Content-->
+  <!-- <div class="sidenav-overlay"></div> -->
+  <!-- <div class="drag-target"></div> -->
+  <!-- BEGIN: Footer-->
+  <%- include(viewsRoot('/Layout/appfooter')) %>
+
+  <%- include(viewsRoot('/Layout/scriptFooter')) %>
+
+  <!-- BEGIN: Page JS-->
+  <script src="/app-scriptPage/managecompanys/page-user-managecompanys.create.js"></script>
+  <script src="/app-validateForm/managecompanys/page-user-managecompanys.create.js"></script>
+  <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

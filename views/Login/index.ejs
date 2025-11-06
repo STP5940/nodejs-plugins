@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+<!-- BEGIN: Head-->
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
+  <meta name="description" content="<%= process.env.WEBSITENAME %> admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
+  <meta name="keywords" content="admin template, <%= process.env.WEBSITENAME %> admin template, dashboard template, flat admin template, responsive admin template, web app">
+  <meta name="author" content="PIXINVENT">
+  <title><%= process.env.WEBSITENAME %> - Login</title>
+  <link rel="shortcut icon" type="image/x-icon" href="/app-assets/images/ico/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600" rel="stylesheet">
+
+  <!-- เปลี่ยนภาษา -->
+  <script src="/translations.js"></script>
+
+  <script>
+    loadTranslations("<%= use.language || 'th' %>").then(() => {
+      updateTranslations();
+      updateTranslations_placeholder();
+    });
+  </script>
+  <!-- สิ้นสุด เปลี่ยนภาษา -->
+
+  <!-- BEGIN: Vendor CSS-->
+  <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors.min.css">
+  <!-- END: Vendor CSS-->
+
+  <!-- BEGIN: Theme CSS-->
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/bootstrap-extended.css">
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/colors.css">
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/components.css">
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/dark-layout.css">
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/bordered-layout.css">
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/semi-dark-layout.css">
+
+  <!-- BEGIN: Page CSS-->
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/core/menu/menu-types/horizontal-menu.css">
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/forms/form-validation.css">
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/pages/authentication.css">
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/extensions/ext-component-sweet-alerts.min.css">
+  <!-- END: Page CSS-->
+
+  <!-- BEGIN: Custom CSS-->
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+  <!-- END: Custom CSS-->
+
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Theme Toggle Style -->
+  <style>
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .theme-toggle .btn {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    /* โหมดปกติ (light) */
+    .theme-toggle .btn:hover {
+      color: #7367f0;
+    }
+
+    /* โหมด dark - ยกเลิก hover */
+    .dark-layout .theme-toggle .btn:hover {
+      color: inherit !important;
+    }
+
+    .theme-toggle .feather {
+      width: 20px;
+      height: 20px;
+    }
+
+    .auth-wrapper .brand-logo .brand-text {
+      color: #7367f0 !important;
+    }
+
+    .dark-layout .auth-wrapper .brand-logo .brand-text {
+      color: #fff !important;
+    }
+  </style>
+
+</head>
+<!-- END: Head-->
+
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu blank-page navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="blank-page">
+  <!-- BEGIN: Content-->
+  <div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+      <div class="content-header row">
+      </div>
+      <div class="content-body">
+
+        <!-- Theme Toggle Button -->
+        <div class="theme-toggle">
+          <a class="btn nav-link nav-link-style" id="toggle-dark-mode">
+            <% if (use.theme === 'sun') { %>
+            <!-- sun -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun ficon">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <% } else { %>
+            <!-- moon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon ficon">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <% } %>
+          </a>
+        </div>
+
+        <div class="auth-wrapper auth-cover">
+          <div class="auth-inner row m-0">
+            <!-- Brand logo-->
+            <a class="brand-logo" href="/login">
+              <svg height="40" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(180)">
+                <path d="M281.44 397.667H438.32C443.326 397.667 448.118 395.908 452.453 393.427C456.789 390.946 461.258 387.831 463.76 383.533C466.262 379.236 468.002 374.36 468 369.399C467.998 364.437 466.266 359.563 463.76 355.268L357.76 172.947C355.258 168.65 352.201 165.534 347.867 163.053C343.532 160.573 337.325 158.813 332.32 158.813C327.315 158.813 322.521 160.573 318.187 163.053C313.852 165.534 310.795 168.65 308.293 172.947L281.44 219.587L227.733 129.13C225.229 124.834 222.176 120.307 217.84 117.827C213.504 115.346 208.713 115 203.707 115C198.701 115 193.909 115.346 189.573 117.827C185.238 120.307 180.771 124.834 178.267 129.13L46.8267 355.268C44.3208 359.563 44.0022 364.437 44 369.399C43.9978 374.36 44.3246 379.235 46.8267 383.533C49.3288 387.83 53.7979 390.946 58.1333 393.427C62.4688 395.908 67.2603 397.667 72.2667 397.667H171.2C210.401 397.667 238.934 380.082 258.827 346.787L306.88 263.4L332.32 219.587L410.053 352.44H306.88L281.44 397.667ZM169.787 352.44H100.533L203.707 174.36L256 263.4L221.361 323.784C208.151 345.387 193.089 352.44 169.787 352.44Z" fill="#7367f0" />
+              </svg>
+              <h3 class="brand-text ms-50 mt-50"><%= process.env.WEBSITENAME %></h3>
+            </a>
+            <!-- /Brand logo-->
+            <!-- Left Text-->
+            <div class="d-none d-lg-flex col-lg-8 align-items-center p-5">
+              <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+                <img class="img-fluid" src="/app-assets/images/pages/<%= use.theme == 'sun' ? 'coming-soon-dark' : 'coming-soon' %>.svg" alt="Login" />
+              </div>
+            </div>
+            <!-- /Left Text-->
+            <!-- Login-->
+            <div class="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5">
+              <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
+
+                <h2 class="card-title text-center fw-bold pb-1">
+                  <span data-language="_title_login">
+                    <!-- Welcome to WEBSITENAME -->
+                  </span>
+                </h2>
+
+                <p class="card-text mb-2" data-language="_signin_account">
+                  <!-- ลงชื่อเข้าใช้บัญชีของคุณ -->
+                </p>
+
+                <div id="errorTitle" class="alert alert-danger" role="alert" style="display: none;">
+                  <h4 class="alert-heading">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle me-50">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="15" y1="9" x2="9" y2="15"></line>
+                      <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                    <%- translat['_error_title'] %>
+                  </h4>
+                  <div class="alert-body" id="errorMessageContainer">
+                  </div>
+                </div>
+
+                <form class="auth-login-form mt-2" id="loginForm">
+                  <input type="hidden" class="form-control" name="_csrfToken" id="csrfToken" value="<%- csrfToken %>">
+                  <div class="mb-1">
+                    <label class="form-label" for="login-email" data-language="_username">
+                      <!-- Username -->
+                    </label>
+                    <input class="form-control" type="text" name="username" id="username" data-language-placeholder="_enter_username" autofocus tabindex="1" autocomplete="username" data-msg="Please enter your Username">
+                  </div>
+                  <div class="mb-1">
+                    <div class="d-flex justify-content-between">
+                      <label class="form-label" for="login-password" data-language="_password">
+                        <!-- Password -->
+                      </label>
+                    </div>
+                    <div class="input-group input-group-merge form-password-toggle">
+                      <input class="form-control form-control-merge" type="password" name="password" id="password" data-language-placeholder="_enter_password" tabindex="2" autocomplete="current-password" data-msg="Please enter your Password">
+                      <span class="input-group-text cursor-pointer">
+                        <i data-feather="eye"></i>
+                      </span>
+                    </div>
+                  </div>
+
+                  <button type="submit" id="btnDisabled" class="btn btn-primary w-100" tabindex="4" data-language="_signin" disabled>
+                    <!-- Sign in -->
+                  </button>
+                </form>
+              </div>
+            </div>
+            <!-- /Login-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END: Content-->
+
+  <div id="sweetalertText" style="display: none;">
+    <span data-language="_error_title"></span>
+    <span data-language="_error_confirm_tfa"></span>
+
+    <span data-language="_confirm_title_tfa"></span>
+    <span data-language="_twofactor_form_app"></span>
+    <span data-language="_confirm_twofactor"></span>
+
+    <span data-language="_twofactor_verify"></span>
+    <span data-language="_discard"></span>
+    <span data-language="_ok"></span>
+  </div>
+
+
+  <!-- BEGIN: Vendor JS-->
+  <script src="/app-assets/vendors/js/vendors.min.js"></script>
+  <!-- BEGIN Vendor JS-->
+
+  <!-- BEGIN: Page Vendor JS-->
+  <script src="/app-assets/vendors/js/ui/jquery.sticky.js"></script>
+  <script src="/app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+  <!-- END: Page Vendor JS-->
+
+  <!-- BEGIN: Theme JS-->
+  <script src="/app-assets/js/core/app-menu.js"></script>
+  <script src="/app-assets/js/core/app.js"></script>
+  <!-- END: Theme JS-->
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- BEGIN: Page JS-->
+  <script src="/app-validateForm/auth-login.js"></script>
+  <script src="/app-scriptPage/auth-login.js"></script>
+  <!-- END: Page JS-->
+
+  <!-- Theme Toggle Script -->
+  <script>
+    $(document).ready(function() {
+
+      let isDarkMode = ("<%= use.theme == 'sun' ? false : true %>" === 'true');
+      localStorage.setItem("isDarkMode", isDarkMode);
+
+      $("#toggle-dark-mode").click(function() {
+
+        // Example API call (replace with your actual API endpoint and logic)
+        const rootPath = window.location.origin;
+        const url = `${rootPath}/user/darkmode/${isDarkMode}`; // Construct URL based on preference
+
+        $('.img-fluid').attr(
+          'src', `/app-assets/images/pages/coming-soon${isDarkMode ? '-dark' : ''}.svg`
+        );
+
+        $.get(url, function(data) {
+            console.log("template_dark:", isDarkMode); // Handle successful response (optional)
+            isDarkMode = !isDarkMode; // Toggle the value
+            localStorage.setItem("isDarkMode", isDarkMode);
+
+          })
+          .fail(function(error) {
+            console.error("API error:", isDarkMode); // Handle errors
+          });
+      });
+    });
+  </script>
+
+</body>
+<!-- END: Body-->
+
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Accesspermission</title>
+  <%- include('../../Layout/tagHead') %>
+
+  <style>
+    .table.table-flush-spacing thead tr>td:first-child,
+    .table.table-flush-spacing tbody tr>td:first-child {
+      padding-left: 27px;
+    }
+
+    .scroll-table thead {
+      text-align: left;
+      top: -1px;
+      position: sticky;
+      z-index: 10;
+    }
+
+    .scroll-table {
+      width: 100%;
+      max-height: 380px;
+      overflow: auto;
+    }
+  </style>
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include('../../Layout/appheader', { Menuname: "_accesspermission" }) %>
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Main Menu-->
+  <%- include('../../Layout/appmenu', { Menuname: "_accesspermission" }) %>
+  <!-- END: Main Menu-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+      <%- include('../../Layout/appbreadcrumb', { Menuname: "_accesspermission" }) %>
+
+      <div class="content-body">
+        <h3 data-language="_accesspermission">
+          <!-- จัดการเมนู -->
+        </h3>
+
+        <div class="row">
+          <div class="col-12 d-flex justify-content-end mb-2">
+            <a type="button" href="javascript:void(0)" data-bs-target="#addRoleModal" data-bs-toggle="modal" class="btn btn-primary waves-effect round">
+              <!-- <i data-feather='plus-square'></i> -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+              <span>เพิ่มข้อมูลสิทธิ์</span>
+              <!-- <span data-language="_managecompanyscreate">เพิ่มสิทธิ์การ</span> -->
+            </a>
+          </div>
+        </div>
+
+        <!-- <p class="mb-2">
+          A role provided access to predefined menus and features so that depending <br />
+          on assigned role an administrator can have access to what he need
+        </p> -->
+
+        <!-- Role cards -->
+        Coming soon
+        <!--/ Role cards -->
+
+        <!-- <h3 class="mt-50">Total users with their roles</h3>
+        <p class="mb-2">Find all of your company’s administrator accounts and their associate roles.</p> -->
+
+        <!-- Add Role Modal -->
+        <div class="modal fade" id="addRoleModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-xl modal-dialog-centered modal-add-new-role">
+            <div class="modal-content">
+              <!-- <div class="modal-header bg-transparent">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div> -->
+              <div class="modal-header">
+                <h4 class="modal-title" id="ModalLabel17">สร้างกลุ่มใหม่</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <!-- <div class="text-left mb-2">
+                  <h1 class="role-title">Add New Role</h1>
+                  <p>Set role permissions</p>
+                </div> -->
+                <!-- Add role form -->
+                <form id="addRoleForm" class="row" onsubmit="return false">
+
+                  <div class="modal-body">
+
+                    <div class="row">
+                      <div class="col-12 col-sm-12 mb-1">
+                        <label class="form-label required-field" for="modalRoleName">ชื่อกลุ่ม</label>
+                        <div class="input-group form-password-toggle input-group-merge">
+                          <input type="password" class="form-control" id="modalRoleName" name="modalRoleName" autocomplete="off" required="" placeholder="ใส่ชื่อกลุ่ม">
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="row">
+                      <div class="col-12 col-sm-12 mb-1">
+                        <h4 class="mt-1" data-language="_accesspermission">
+                          <!-- รายชื่อเมนู -->
+                        </h4>
+                        <!-- Permission table -->
+                        <div class="table-responsive">
+                          <div class="scroll-table">
+                            <table class="table table-flush-spacing">
+                              <thead>
+                                <tr>
+                                  <th style="width: 60%;" class="text-nowrap fw-bolder">
+                                    <label class="form-check-label">Administrator Access</label>
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="Allows a full access to the system">
+                                      <i data-feather="info"></i>
+                                    </span>
+                                  </th>
+                                  <th>
+                                    <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" id="selectAll" />
+                                      <label style="padding-top: 0.1rem;" class="form-check-label" for="selectAll"> เลือกทั้งหมด </label>
+                                    </div>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">User Management</td>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="userManagementRead" />
+                                        <label class="form-check-label" for="userManagementRead"> อ่าน </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="userManagementWrite" />
+                                        <label class="form-check-label" for="userManagementWrite"> แก้ไข </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="userManagementCreate" />
+                                        <label class="form-check-label" for="userManagementCreate"> สร้าง </label>
+                                      </div>
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="userManagementDelete" />
+                                        <label class="form-check-label" for="userManagementDelete"> ลบ </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">Content Management</td>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="contentManagementRead" />
+                                        <label class="form-check-label" for="contentManagementRead"> อ่าน </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="contentManagementWrite" />
+                                        <label class="form-check-label" for="contentManagementWrite"> แก้ไข </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="contentManagementCreate" />
+                                        <label class="form-check-label" for="contentManagementCreate"> สร้าง </label>
+                                      </div>
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="contentManagementDelete" />
+                                        <label class="form-check-label" for="contentManagementDelete"> ลบ </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">Disputes Management</td>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="dispManagementRead" />
+                                        <label class="form-check-label" for="dispManagementRead"> อ่าน </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="dispManagementWrite" />
+                                        <label class="form-check-label" for="dispManagementWrite"> แก้ไข </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="dispManagementCreate" />
+                                        <label class="form-check-label" for="dispManagementCreate"> สร้าง </label>
+                                      </div>
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="dispManagementDelete" />
+                                        <label class="form-check-label" for="dispManagementDelete"> ลบ </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">Database Management</td>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="dbManagementRead" />
+                                        <label class="form-check-label" for="dbManagementRead"> อ่าน </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="dbManagementWrite" />
+                                        <label class="form-check-label" for="dbManagementWrite"> แก้ไข </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="dbManagementCreate" />
+                                        <label class="form-check-label" for="dbManagementCreate"> สร้าง </label>
+                                      </div>
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="dbManagementDelete" />
+                                        <label class="form-check-label" for="dbManagementDelete"> ลบ </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">Financial Management</td>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="finManagementRead" />
+                                        <label class="form-check-label" for="finManagementRead"> อ่าน </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="finManagementWrite" />
+                                        <label class="form-check-label" for="finManagementWrite"> แก้ไข </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="finManagementCreate" />
+                                        <label class="form-check-label" for="finManagementCreate"> สร้าง </label>
+                                      </div>
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="finManagementDelete" />
+                                        <label class="form-check-label" for="finManagementDelete"> ลบ </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">Reporting</td>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="reportingRead" />
+                                        <label class="form-check-label" for="reportingRead"> อ่าน </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="reportingWrite" />
+                                        <label class="form-check-label" for="reportingWrite"> แก้ไข </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="reportingCreate" />
+                                        <label class="form-check-label" for="reportingCreate"> สร้าง </label>
+                                      </div>
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="reportingDelete" />
+                                        <label class="form-check-label" for="reportingDelete"> ลบ </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">API Control</td>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="apiRead" />
+                                        <label class="form-check-label" for="apiRead"> อ่าน </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="apiWrite" />
+                                        <label class="form-check-label" for="apiWrite"> แก้ไข </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="apiCreate" />
+                                        <label class="form-check-label" for="apiCreate"> สร้าง </label>
+                                      </div>
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="apiDelete" />
+                                        <label class="form-check-label" for="apiDelete"> ลบ </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">Repository Management</td>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="repoRead" />
+                                        <label class="form-check-label" for="repoRead"> อ่าน </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="repoWrite" />
+                                        <label class="form-check-label" for="repoWrite"> แก้ไข </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="repoCreate" />
+                                        <label class="form-check-label" for="repoCreate"> สร้าง </label>
+                                      </div>
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="repoDelete" />
+                                        <label class="form-check-label" for="repoDelete"> ลบ </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">Payroll</td>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="payrollRead" />
+                                        <label class="form-check-label" for="payrollRead"> อ่าน </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="payrollWrite" />
+                                        <label class="form-check-label" for="payrollWrite"> แก้ไข </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="payrollCreate" />
+                                        <label class="form-check-label" for="payrollCreate"> สร้าง </label>
+                                      </div>
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="payrollDelete" />
+                                        <label class="form-check-label" for="payrollDelete"> ลบ </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="text-nowrap fw-bolder">Billing</td>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="billingRead" />
+                                        <label class="form-check-label" for="billingRead"> อ่าน </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="billingWrite" />
+                                        <label class="form-check-label" for="billingWrite"> แก้ไข </label>
+                                      </div>
+                                      <div class="form-check me-3 me-lg-5">
+                                        <input class="form-check-input" type="checkbox" id="billingCreate" />
+                                        <label class="form-check-label" for="billingCreate"> สร้าง </label>
+                                      </div>
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="billingDelete" />
+                                        <label class="form-check-label" for="billingDelete"> ลบ </label>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+
+                        </div>
+                        <!-- Permission table -->
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="submit" id="btnDisabled" class="btn btn-primary me-1" data-language="_save_changes">
+                      <!-- Save changes -->
+                    </button>
+                    <button type="button" class="btn btn-outline-danger waves-effect waves-float waves-light" data-bs-dismiss="modal">ยกเลิก</button>
+                  </div>
+                  <!-- <div class="col-12 text-center mt-2">
+                    <button type="submit" class="btn btn-primary me-1">Submit</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">
+                      Discard
+                    </button>
+                  </div> -->
+                </form>
+                <!--/ Add role form -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--/ Add Role Modal -->
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- END: Content-->
+  <!-- <div class="sidenav-overlay"></div> -->
+  <!-- <div class="drag-target"></div> -->
+  <!-- BEGIN: Footer-->
+  <%- include('../../Layout/appfooter') %>
+
+  <%- include('../../Layout/scriptFooter') %>
+
+  <!-- BEGIN: Page JS-->
+  <!-- <script src="../app-validateForm/page-user-security.js"></script>
+  <script src="../app-scriptPage/page-user-security.js"></script> -->
+  <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<!-- <html class="loading dark-layout" lang="en" data-textdirection="ltr"> -->
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Twofactor</title>
+  <%- include('../../Layout/tagHead') %>
+
+  <!-- BEGIN: Vendor CSS-->
+  <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/extensions/toastr.min.css">
+  <!-- END: Vendor CSS-->
+
+  <!-- BEGIN: Page CSS-->
+  <link rel="stylesheet" type="text/css" href="../app-assets/css/plugins/extensions/ext-component-toastr.min.css">
+  <!-- END: Page CSS-->
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include('../../Layout/appheader', { Menuname: "_twofactor" }) %>
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Main Menu-->
+  <%- include('../../Layout/appmenu', { Menuname: "_twofactor" }) %>
+  <!-- END: Main Menu-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+      <%- include('../../Layout/appbreadcrumb', { Menuname: "_twofactor" }) %>
+
+      <div class="content-body">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="card">
+              <div class="card-header border-bottom">
+                <h4 class="card-title" data-language="_twofactor_on">
+                  <!-- เปิดใช้งาน 2FA -->
+                </h4>
+              </div>
+
+              <!-- form -->
+              <form class="validate-form" action="/user/twofactor/update" method="post">
+
+                <div class="card-body pt-1">
+
+                  <% if(messages.success){ %>
+                  <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">
+                      <!-- <i data-feather="check-circle" class="me-50"></i> -->
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle me-50">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                      </svg>
+                      <span data-language="_success_title">
+                        <!-- _error_title -->
+                      </span>
+                    </h4>
+                    <div class="alert-body">
+                      <ul class="ps-1 ms-25">
+                        <li data-language="<%= messages.success %>"></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <% } %>
+
+                  <% if(messages.error){ %>
+
+                  <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">
+                      <!-- <i data-feather="x-circle" class="me-50"></i> -->
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle me-50">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                      </svg>
+                      <span data-language="_error_title">
+                        <!-- _error_title -->
+                      </span>
+                    </h4>
+                    <div class="alert-body">
+                      <ul class="ps-1 ms-25">
+                        <% messages.error.forEach(message => { %>
+                        <li data-language="<%= message %>"></li>
+                        <% }) %>
+                      </ul>
+                    </div>
+                  </div>
+                  <% } %>
+
+                  <% if (use.tfaactive == false) { %>
+
+                  <div class="row">
+
+                    <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8 col-xl-9">
+                      <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-5 col-xl-5">
+
+                          <h5 style="margin-bottom: 0.5%;" class="card-title" data-language="_open_scan_qr">
+                            <!-- เปิดแอปสแกน QR CODE -->
+                          </h5>
+                          <p style="font-size: 13px;" data-language="_open_scan_qr_note">
+                            <!-- * หาไม่สามารถสแกนโค้ด QR โปรดคัดลอก และป้อนคีย์ด้วยตนเองลงในแอป -->
+                          </p>
+                          <p class="d-flex justify-content-center">
+                            <!-- <img id="borderimgBarcode" src="<%= qrDataURL %>" alt="QR Code" class="img-fluid"> -->
+                            <img src="<%= qrDataURL %>" alt="QR Code" class="img-fluid">
+                          </p>
+                        </div>
+                        <div class="col-7"></div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                      <div class="card text-center">
+                        <div class="card-body" style="padding: 1px;">
+                          <h4><strong>INSTALL APPLICATION</strong></h4>
+                          <div class="d-flex justify-content-center">
+                            <img src="/app-assets/images/logo/google-authen.svg" width="20%" height="20%" class="rounded float-right" style="margin-bottom: 5%; margin-top: 5%;">
+                          </div>
+                          <h6>Google Authenticator</h6>
+                        </div>
+                        <div class="card-body" style="padding: 1px;">
+                          <p style="margin-bottom: 1%;">
+                            <a href="https://apps.apple.com/th/app/google-authenticator/id388497605" target="_blank" rel="Google Authenticator noopener">
+                              <img src="/app-assets/images/logo/IOS.png" width="30%" height="30px;" class="rounded float-right" style="margin-bottom: 2%; padding-left: 10px;">
+                            </a>
+                            <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=th" target="_blank" rel="Google Authenticator noopener">
+                              <img src="/app-assets/images/logo/Android.png" width="30%" height="30px;" class="rounded float-right" style="margin-bottom: 2%; padding-left: 10px;">
+                            </a>
+                          </p>
+                          <sub class="card-text" data-language="_install_google_authenticator">
+                            <!-- ดาวน์โหลดและติดตั้ง Google Authenticator -->
+                          </sub>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <input type="hidden" class="form-control" name="_csrfToken" value="<%- csrfToken %>">
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label" for="copyname-to-clipboard" data-language="_name_account">
+                        <!-- ชื่อบัญชี -->
+                      </label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="copyname-to-clipboard-input" aria-describedby="btn-copyname" value="<%= process.env.WEBSITENAME %>: <%= use.username.toUpperCase() %>" readonly />
+                        <button type="button" class="btn btn-outline-primary" id="btn-copyname">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                          </svg>
+                          <span data-language="_copy"></span>
+                          <!-- คัดลอกข้อมูล -->
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label" for="copykey-to-clipboard" data-language="_twofactor_key">
+                        <!-- รหัสของคุณ -->
+                      </label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="copykey-to-clipboard-input" aria-describedby="btn-copykey" value="<%= use.tfa %>" readonly />
+                        <button type="button" class="btn btn-outline-primary" id="btn-copykey">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                          </svg>
+                          <span data-language="_copy"></span>
+                          <!-- คัดลอกข้อมูล -->
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label" for="account-new-password" data-language="_twofactor_form_app">
+                        <!-- รหัส 6 หลักที่ได้จากแอป 2FA Authenticator -->
+                      </label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="confirm_twofactor" name="confirm_twofactor" data-language-placeholder="_confirm_twofactor" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <% } else { %>
+
+                  <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">
+                      <!-- <i data-feather="info" class="me-50"></i> -->
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info me-50">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                      </svg>
+                      <span data-language="_twofactor_note">
+                        <!-- หมายเหตุ -->
+                      </span>
+                    </h4>
+                    <div class="alert-body">
+                      <ul class="ps-1 ms-25">
+                        <li data-language="_twofactor_note_sub1">
+                          <!-- กรุณาอย่าลบแอปหลังเปิดใช้งานสำเร็จ เพราะรหัส 2FA จะหายไปและจำเป็นต้องขอการยกเลิกจากพนักงาน และตั้งค่าแอปใหม่ -->
+                        </li>
+                        <li data-language="_twofactor_note_sub2">
+                          <!-- เราจะไม่รับผิดชอบต่อความเสียหายใด ๆ ที่อาจเกิดขึ้นจากการเข้าถึงรหัส 2FA ของคุณโดยไม่ได้รับอนุญาต -->
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap text-center">
+                      <thead>
+                        <tr>
+                          <th class="text-start col-9" data-language="_activity">
+                            <!-- กิจกรรม -->
+                          </th>
+                          <th class="col-3" data-language="_activation_status">
+                            <!-- สถานะเปิดใช้งาน -->
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="text-start">
+                            <span style="font-size: 16px;" data-language="_twofactor_activation_status">
+                              <!-- เปิดใช้งาน 2FA -->
+                            </span>
+                          </td>
+                          <td class="text-center">
+                            <span style="color: rgb(16, 214, 117); font-size: 16px;">
+                              <strong data-language="_activated">
+                                <!-- เปิดใช้งานแล้ว -->
+                              </strong>
+                            </span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-start">
+                            <span style="font-size: 16px;" data-language="_twofactor_login">
+                              <!-- ตรวจสอบการเข้าสู่ระบบ -->
+                            </span>
+                          </td>
+                          <td class="align-middle">
+                            <div class="form-check form-check-success form-switch d-flex justify-content-center align-items-center">
+                              <input type="checkbox" class="form-check-input cursor-pointer" id="signinAccount" <%- use.signinaccount? 'checked':'' %> />
+                            </div>
+                          </td>
+                          <!-- <td class="d-flex justify-content-end">
+                          <div class="form-check form-check-success form-switch">
+                            <input type="checkbox" class="form-check-input cursor-pointer" id="customSwitch1" checked />
+                          </div>
+                        </td> -->
+                          <!-- <td class="text-end">
+                          <span style="color: rgb(16, 214, 117); font-size: 16px;">
+                            <strong>เปิดใช้งานแล้ว</strong>
+                          </span>
+                        </td> -->
+                        </tr>
+                        <tr>
+                          <td class="text-start">
+                            <span style="font-size: 16px;" data-language="_twofactor_password_change">
+                              <!-- ตรวจสอบการเปลี่ยนรหัสผ่าน -->
+                            </span>
+                          </td>
+                          <td class="align-middle">
+                            <div class="form-check form-check-success form-switch d-flex justify-content-center align-items-center">
+                              <input type="checkbox" class="form-check-input cursor-pointer" id="changePassword" <%- use.changepassword? 'checked':'' %> />
+                            </div>
+                          </td>
+                          <!-- <td class="d-flex justify-content-end">
+                          <div class="form-check form-check-success form-switch">
+                            <input type="checkbox" class="form-check-input cursor-pointer" id="customSwitch1" checked />
+                          </div>
+                        </td> -->
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- / recent device -->
+
+                  <% } %>
+                </div>
+
+                <% if (use.tfaactive == false) { %>
+                <div class="modal-footer">
+                  <button type="submit" id="btnDisabled" class="btn btn-primary me-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                      <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span data-language="_save_changes"></span>
+                    <!-- Save changes -->
+                  </button>
+                  <button type="reset" class="btn btn-outline-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rotate-ccw">
+                      <polyline points="1 4 1 10 7 10"></polyline>
+                      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    <span data-language="_discard"></span>
+                    <!-- Discard -->
+                  </button>
+                </div>
+                <% } %>
+
+              </form>
+            </div>
+
+            <!--/ twofactor -->
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <div id="sweetalertText" style="display: none;">
+    <span data-language="_error_title">
+      <!-- เกิดข้อผิดพลาด -->
+    </span>
+    <span data-language="_error_confirm_tfa">
+      <!-- ยืนยันรหัส 6 หลักที่ได้จากแอปไม่ถูกต้อง -->
+    </span>
+
+    <span data-language="_confirm_title_tfa">
+      <!-- โปรดระบุรหัส 2FA (ตัวเลข 6 หลัก) -->
+    </span>
+    <span data-language="_twofactor_form_app">
+      <!-- รหัส 6 หลักที่ได้จากแอป -->
+    </span>
+    <span data-language="_confirm_twofactor">
+      <!-- ใส่รหัสจากแอป -->
+    </span>
+
+    <span data-language="_twofactor_verify">
+      <!-- ยืนยันตัวตน -->
+    </span>
+    <span data-language="_discard">
+      <!-- ยกเลิก -->
+    </span>
+    <span data-language="_ok">
+      <!-- รับทราบ -->
+    </span>
+  </div>
+  <!-- END: Content-->
+  <!-- <div class="sidenav-overlay"></div> -->
+  <!-- <div class="drag-target"></div> -->
+  <!-- BEGIN: Footer-->
+  <%- include('../../Layout/appfooter') %>
+
+  <%- include('../../Layout/scriptFooter') %>
+
+  <!-- BEGIN: Page Vendor JS-->
+  <!-- <script src="../../../app-assets/vendors/js/ui/jquery.sticky.js"></script> -->
+  <script src="../../../app-assets/vendors/js/extensions/toastr.min.js"></script>
+  <!-- END: Page Vendor JS-->
+
+  <!-- BEGIN: Page JS-->
+  <script src="../app-extensions/ext-component-clipboard.js"></script>
+  <!-- END: Page JS-->
+
+  <!-- <script src="../app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script> -->
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+
+  <!-- BEGIN: Page JS-->
+  <script src="../app-scriptPage/twofactor/page-user-twofactor.js"></script>
+  <script src="../app-validateForm/twofactor/page-user-twofactor.js"></script>
+  <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

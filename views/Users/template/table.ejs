@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Managecustomers</title>
+  <%- include(viewsRoot('/Layout/tagHead')) %>
+
+  <style>
+    @media (max-width: 767px) {
+      /* .table-responsive .dropdown-menu {
+        position: static !important;
+      } */
+    }
+
+    @media (min-width: 1000px) {
+      .table-responsive {
+        overflow: visible !important;
+      }
+    }
+  </style>
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include(viewsRoot('/Layout/appheader'), { Menuname: "_managecustomers" }) %>
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Main Menu-->
+  <%- include(viewsRoot('/Layout/appmenu'), { Menuname: "_managecustomers" }) %>
+  <!-- END: Main Menu-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+      <%- include(viewsRoot('/Layout/appbreadcrumb'), { Menuname: "_managecustomers" }) %>
+
+
+      <div class="content-body">
+
+        <!-- Striped rows start -->
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+
+              <div class="card-header border-bottom py-1">
+                <h4 class="card-title" data-language="_managecustomers">
+                  <!-- ข้อมูลลูกค้า -->
+                </h4>
+
+                <% if (use?.permission?.[controllerName]?.create) { %>
+                <a type="button" href="/user/managecustomers/create" class="btn btn-primary waves-effect round">
+                  <!-- <i data-feather='plus-square'></i> -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                  </svg>
+                  <span data-language="_managecustomerscreate">
+                    <%= translat._managecustomerscreate %>
+                    <!-- เพิ่มข้อมูล -->
+                  </span>
+                </a>
+                <% } %>
+              </div>
+
+
+              <div class="card-body pt-1">
+                <div class="table-responsive">
+                  <table id="employeesTable" class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th hidden>ID</th>
+                        <th style="width: 20%;" data-language="_fullnameuser">
+                          <!-- ชื่อพนักงาน -->
+                        </th>
+                        <th style="width: 16%; text-align: center;" data-language="_accessroles">
+                          <!-- กลุ่มสมาชิก -->
+                        </th>
+                        <th style="width: 15%; text-align: center;" data-language="_username">
+                          <!-- ชื่อเข้าใช้งาน -->
+                        </th>
+                        <th style="width: 13%; text-align: center;" data-language="_phone">
+                          <!-- เบอร์โทร -->
+                        </th>
+                        <th style="width: 13%; text-align: center;" data-language="_user_status">
+                          <!-- สถานะพนักงาน -->
+                        </th>
+                        <th style="width: 13%; text-align: center;" data-language="_confirm_email">
+                          <!-- ยืนยันอีเมล์ -->
+                        </th>
+                        <!-- เช็คสิทธิในการอัปเดท หรือลบ -->
+                        <% if (use?.permission?.[controllerName]?.update || use?.permission?.[controllerName]?.delete) { %>
+                        <th style="width: 10%; text-align: center;" class="no-search" data-language="_operations">
+                          <!-- ดำเนินการ -->
+                        </th>
+                        <% } %>
+                      </tr>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <tr>
+                        <td hidden>column-0</td>
+                        <td>
+                          column-1
+                        </td>
+                        <td style="text-align: center;">
+                          column-2
+                        </td>
+                        <td style="text-align: center;">
+                          column-3
+                        </td>
+                        <td style="text-align: center;">
+                          column-4
+                        </td>
+                        <td style="text-align: center;">
+                          column-5
+                        </td>
+                        <td style="text-align: center;">
+                          column-6
+                        </td>
+
+                        <!-- เช็คสิทธิในการอัปเดท หรือลบ -->
+                        <% if (use?.permission?.[controllerName]?.update || use?.permission?.[controllerName]?.delete) { %>
+                        <td style="text-align: center;">
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-outline-primary hide-arrow dropdown-toggle btn-sm" data-bs-toggle="dropdown" aria-expanded="false">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                              </svg>
+                              <span data-language="_operations">
+                                <!-- การดำเนินการ -->
+                              </span>
+                            </button>
+                            <div class="dropdown-menu menu-option py-25">
+                              <% if (use?.permission?.[controllerName]?.update) { %>
+                              <a class="dropdown-item" href="/user/managecustomers/edit/column-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
+                                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                <span data-language="_edit_information">
+                                  <!-- แก้ไขข้อมูล -->
+                                </span>
+                              </a>
+                              <% } %>
+
+                              <% if (use?.permission?.[controllerName]?.delete && use?.permission?.[controllerName]?.update) { %>
+                              <div class="dropdown-divider my-25"></div>
+                              <% } %>
+
+                              <% if (use?.permission?.[controllerName]?.delete) { %>
+
+                              <a class="dropdown-item btn btn-danger deleteEmployeeBtn mx-25 px-1 py-75" employeeUsername="demo" employeeId="column-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2">
+                                  <polyline points="3 6 5 6 21 6"></polyline>
+                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                                <span data-language="_deactivate_information">
+                                  <!-- ยกเลิกการใช้งาน -->
+                                </span>
+                              </a>
+                              <% } %>
+
+                            </div>
+                          </div>
+                        </td>
+                        <% } %>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- Striped rows end -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- END: Content-->
+  <!-- <div class="sidenav-overlay"></div> -->
+  <!-- <div class="drag-target"></div> -->
+  <!-- BEGIN: Footer-->
+  <%- include(viewsRoot('/Layout/appfooter')) %>
+
+  <%- include(viewsRoot('/Layout/scriptFooter')) %>
+
+  <!-- BEGIN: Page JS-->
+  <!-- <script src="/app-scriptPage/managecustomers/page-user-managecustomers.index.js"></script> -->
+  <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

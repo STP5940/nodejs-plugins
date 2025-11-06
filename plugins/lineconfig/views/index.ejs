@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Lineconfig</title>
+  <%- include(viewsRoot('/Layout/tagHead')) %>
+
+  <!-- BEGIN: Vendor CSS-->
+  <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/extensions/toastr.min.css">
+  <!-- END: Vendor CSS-->
+
+  <!-- BEGIN: Page CSS-->
+  <link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/extensions/ext-component-toastr.min.css">
+  <!-- END: Page CSS-->
+
+  <!-- START ตัวอย่างเรียกใช้ css, js ของ plugin -->
+  <link rel="stylesheet" href="<%= url('/css/blog.css') %>">
+  <script src="<%= url('/js/blog.js') %>"></script>
+  <!-- END ตัวอย่างเรียกใช้ css, js ของ plugin -->
+
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include(viewsRoot('/Layout/appheader'), { Menuname: "_line_account" }) %>
+    <!-- _template = เปลี่ยนเป็นชื่อเมนู -->
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Main Menu-->
+  <%- include(viewsRoot('/Layout/appmenu'), { Menuname: "_line_account" }) %>
+  <!-- _template = เปลี่ยนเป็นชื่อเมนู -->
+  <!-- END: Main Menu-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+      <%- include(viewsRoot('/Layout/appbreadcrumb'), { Menuname: "_line_account" }) %>
+      <!-- _template = เปลี่ยนเป็นชื่อเมนู -->
+
+      <div class="content-body">
+        <div class="row">
+          <div class="col-12">
+            <!-- template -->
+
+            <div class="card">
+              <div class="card-header border-bottom">
+                <h4 data-language="_line_account" class="card-title">
+                  <!-- บัญชีแจ้งเตือน LINE -->
+                </h4>
+              </div>
+
+              <!-- form -->
+              <form class="validate-form" id="lineconfigeditForm">
+
+                <div class="card-body pt-1">
+                  <input type="hidden" class="form-control" id="_csrfToken" value="<%- csrfToken %>">
+                  <input type="hidden" id="_companyId" value="<%= encryptText(use.Company_id.toString()) %>">
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label required-field" for="new_secret" data-language="_channel_secret">
+                        <!-- Channel secret -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" value="<%= lineconfig?.secret %>" class="form-control" id="new_secret" name="new_secret" data-language-placeholder="_enter_channel_secret" required />
+                      </div>
+                    </div>
+                    <% if(!isNotSecure){ %>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label" for="webhook-to-clipboard">
+                        Webhook URL
+                      </label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="webhook-to-clipboard-input" aria-describedby="btn-webhook" value="<%= serverHost %>/user/plugins/lineconfig/webhook/4475af30eaf2bf347cd725825955e69c" readonly />
+                        <button type="button" class="btn btn-outline-primary" id="btn-webhook">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                          </svg>
+                          <span data-language="_copy"></span>
+                          <!-- คัดลอกข้อมูล -->
+                        </button>
+                      </div>
+                    </div>
+                    <% } %>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label required-field" for="new_accessToken" data-language="_channel_access_token">
+                        <!-- Channel access token -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <textarea rows="4" cols="50" class="form-control" id="new_accessToken" name="new_accessToken" data-language-placeholder="_enter_details" required><%= lineconfig?.accessToken %></textarea>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label" for="new_groupId" data-language="_line_targetId">
+                        <!-- แชทปลายทางแจ้งเตือน Group ID -->
+                      </label>
+                      <div class="input-group">
+                        <input type="text" value="<%= lineconfig?.groupId %>" class="form-control" id="new_groupId" name="new_groupId" data-language-placeholder="_enter_line_targetId" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="divider divider-start">
+                    <div class="divider-text">
+                      <h4 data-language="_select_notification_item">
+                        <!-- เลือกรายการแจ้งเตือน -->
+                      </h4>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label" data-language="_new_task">
+                        <!-- เปิดงานใหม่ -->
+                      </label>
+                      <div class="mt-1 d-flex flex-wrap gap-2">
+                        <div class="form-check form-check-inline">
+                          <input type="checkbox" class="form-check-input" id="new_cmnew" name="new_cmnew" value="<%= lineconfig?.cmnew %>" <%= (lineconfig?.cmnew? 'checked':'') %>>
+                          <label style="user-select: none;" class="form-check-label" for="new_cmnew" data-language="_correctivemaintenance">
+                            <!--  ซ่อมบำรุงเชิงแก้ไข (CM) -->
+                          </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input type="checkbox" class="form-check-input" id="new_pmnew" name="new_pmnew" value="<%= lineconfig?.pmnew %>" <%= (lineconfig?.pmnew? 'checked':'') %>>
+                          <label style="user-select: none;" class="form-check-label" for="new_pmnew" data-language="_preventivemaintenance">
+                            <!-- ซ่อมบำรุงตามรอบ (PM) -->
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label" data-language="_task_completed">
+                        <!-- ดำเนินการเสร็จแล้ว -->
+                      </label>
+                      <div class="mt-1 d-flex gap-5">
+                        <div class="form-check form-check-inline">
+                          <input type="checkbox" class="form-check-input" id="new_cmcomplete" name="new_cmcomplete" value="<%= lineconfig?.cmcomplete %>" <%= (lineconfig?.cmcomplete? 'checked':'') %>>
+                          <label style="user-select: none;" class="form-check-label" for="new_cmcomplete" data-language="_correctivemaintenance">
+                            <!--  ซ่อมบำรุงเชิงแก้ไข (CM) -->
+                          </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input type="checkbox" class="form-check-input" id="new_pmcomplete" name="new_pmcomplete" value="<%= lineconfig?.pmcomplete %>" <%= (lineconfig?.pmcomplete? 'checked':'') %>>
+                          <label style="user-select: none;" class="form-check-label" for="new_pmcomplete" data-language="_preventivemaintenance">
+                            <!-- ซ่อมบำรุงตามรอบ (PM) -->
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="modal-footer">
+                  <!-- ปุ่มชิดซ้าย -->
+                  <button type="button" id="btnTestConnection" class="btn btn-outline-primary round me-auto">
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send">
+                      <line x1="22" y1="2" x2="11" y2="13"></line>
+                      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg> -->
+                    <i data-feather="bell"></i>
+                    <span data-language="_connection_test">ทดสอบการเชื่อมต่อ</span>
+                  </button>
+
+                  <button type="submit" id="btnDisabled" class="btn btn-primary me-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                      <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span data-language="_save_changes"></span>
+                    <!-- Save changes -->
+                  </button>
+                  <button type="reset" class="btn btn-outline-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rotate-ccw">
+                      <polyline points="1 4 1 10 7 10"></polyline>
+                      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    <span data-language="_discard"></span>
+                    <!-- Discard -->
+                  </button>
+                </div>
+              </form>
+              <!--/ form -->
+            </div>
+
+            <!--/ template -->
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- END: Content-->
+  <!-- <div class="sidenav-overlay"></div> -->
+  <!-- <div class="drag-target"></div> -->
+  <!-- BEGIN: Footer-->
+  <%- include(viewsRoot('/Layout/appfooter')) %>
+
+  <%- include(viewsRoot('/Layout/scriptFooter')) %>
+
+  <!-- START ตัวอย่างเรียกใช้ css, js ของ plugin -->
+  <script src="<%= url('/app-validateForm/page-user-lineconfig.edit.js') %>"></script>
+  <script src="<%= url('/app-scriptPage/page-user-lineconfig.edit.js') %>"></script>
+  <!-- END ตัวอย่างเรียกใช้ css, js ของ plugin -->
+
+  <!-- BEGIN: Page Vendor JS-->
+  <script src="/app-assets/vendors/js/extensions/toastr.min.js"></script>
+  <!-- END: Page Vendor JS-->
+
+  <!-- BEGIN: Page JS-->
+  <script src="<%= url('/app-extensions/ext-component-clipboard.js') %>"></script>
+  <!-- END: Page JS-->
+</body>
+<!-- END: Body-->
+
+</html>

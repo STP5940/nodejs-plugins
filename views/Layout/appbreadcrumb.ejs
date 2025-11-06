@@ -1,0 +1,128 @@
+<div class="content-header row">
+  <div class="content-header-left col-md-9 col-10  mb-2">
+    <div class="row breadcrumbs-top">
+      <div class="col-12">
+        <h2 class="content-header-title float-start mb-0"><%= process.env.WEBSITENAME?.toUpperCase() %></h2>
+        <div class="breadcrumb-wrapper">
+          <ol class="breadcrumb">
+            <% if (Menuname !== '_menu') { %>
+            <li class="breadcrumb-item">
+              <a href="/menu" data-language="_menu">
+                <!-- เมนูหลัก -->
+              </a>
+            </li>
+            <% } %>
+
+            <% Menuname.split(",").forEach(menu => { %>
+            <% const parts = menu.split("="); %>
+            <li class="breadcrumb-item<%= parts.length >= 2 ? '' : ' active' %>">
+              <% if (parts.length >= 2) { %>
+              <a href="<%= parts[1].trim() %>" data-language="<%= parts[0].trim() %>"></a>
+              <% } else { %>
+              <span data-language='<%= menu.trim() %>'></span>
+              <% } %>
+            </li>
+            <% }); %>
+
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content-header-right text-md-end col-md-3 col-2" style="text-align: right;">
+    <div class="mb-1 breadcrumb-right">
+      <div class="dropdown">
+        <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <!-- <i data-feather="grid"></i> -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </button>
+        <!-- <a class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" href="/menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </a> -->
+        <!-- dropdown-menu menu-option py-25 show -->
+        <div class="dropdown-menu menu-option dropdown-menu-end">
+          <a class="dropdown-item" href="/menu">
+            <!-- <i class="me-25" data-feather="layers"></i> -->
+            <i class="me-25" data-feather="home"></i>
+            <span class="align-middle" data-language="_home">
+              <!-- Menu -->
+            </span>
+          </a>
+
+          <% if (typeof _customerId !== 'undefined' && _customerId && _customerId.trim() !== '') { %>
+
+          <% if (
+            use?.permission['WorkinstructionsController']?.read || 
+            use?.permission['MaintenancescheduleController']?.read || 
+            use?.permission['CorrectivemaintenanceController']?.read || 
+            use?.permission['PreventivemaintenanceController']?.read
+            ) { %>
+          <div class="dropdown-divider my-25"></div>
+          <% } %>
+
+          <% if (use?.permission['WorkinstructionsController']?.read) { %>
+          <a class="dropdown-item <%= (controllerName === 'WorkinstructionsController'? 'active':'') %>" href="/user/workinstructions/cusid/<%= _customerId %>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book me-25">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <span class="align-middle" data-language="_workinstructions">
+              <!-- กำหนดสิทธิ์สร้างคู่มือ (WI) -->
+            </span>
+          </a>
+          <% } %>
+
+          <% if (use?.permission['MaintenancescheduleController']?.read) { %>
+          <a class="dropdown-item <%= (controllerName === 'MaintenancescheduleController'? 'active':'') %>" href="/user/maintenanceschedule/cusid/<%= _customerId %>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text me-25">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span class="align-middle" data-language="_maintenanceschedule">
+              <!-- เอกสารซ่อมบำรุงและประกัน -->
+            </span>
+          </a>
+          <% } %>
+
+          <% if (use?.permission['CorrectivemaintenanceController']?.read) { %>
+          <a class="dropdown-item <%= (controllerName === 'CorrectivemaintenanceController'? 'active':'') %>" href="/user/correctivemaintenance/cusid/<%= _customerId %>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tool me-25">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+            <span class="align-middle" data-language="_correctivemaintenance">
+              <!-- ซ่อมบำรุงเชิงแก้ไข (CM) -->
+            </span>
+          </a>
+          <% } %>
+
+          <% if (use?.permission['PreventivemaintenanceController']?.read) { %>
+          <a class="dropdown-item <%= (controllerName === 'PreventivemaintenanceController'? 'active':'') %>" href="/user/preventivemaintenance/cusid/<%= _customerId %>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock me-25">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span class="align-middle" data-language="_preventivemaintenance">
+              <!-- ซ่อมบำรุงตามรอบ (PM) -->
+            </span>
+          </a>
+          <% } %>
+
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

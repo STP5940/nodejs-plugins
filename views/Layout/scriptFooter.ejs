@@ -1,0 +1,158 @@
+<!-- BEGIN: Vendor JS-->
+<script src="/app-assets/vendors/js/vendors.min.js"></script>
+<!-- BEGIN Vendor JS-->
+<!-- BEGIN: Page Vendor JS-->
+<script src="/app-assets/vendors/js/ui/jquery.sticky.js"></script>
+
+<script src="/app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js"></script>
+<script src="/app-assets/vendors/js/tables/datatable/dataTables.bootstrap5.min.js"></script>
+<!-- END: Page Vendor JS-->
+<!-- BEGIN: Theme JS-->
+<script src="/app-assets/js/core/app-menu.js"></script>
+<!-- END: Theme JS-->
+<!-- BEGIN: Page JS-->
+<!-- END: Page JS-->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- BEGIN: Page /user/security-->
+<script src="/app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+<script src="/app-assets/js/core/app.js"></script>
+<!-- END: Page JS-->
+
+<script src="/app-global/action.js"></script>
+<script src="/app-global/ajax.js"></script>
+
+<script>
+  $(document).ready(function() {
+
+    $('.required-field').append('<strong class="text-danger" style="font-size: 1rem;">&nbsp;*</strong>');
+
+    let isDarkMode = ("<%= use.theme == 'sun' ? false : true %>" === 'true');
+    localStorage.setItem("isDarkMode", isDarkMode);
+
+    $("#toggle-dark-mode").click(function() {
+
+      // Example API call (replace with your actual API endpoint and logic)
+      const rootPath = window.location.origin;
+      const url = `${rootPath}/user/darkmode/${isDarkMode}`; // Construct URL based on preference
+
+      $.get(url, function(data) {
+          console.log("template_dark:", isDarkMode); // Handle successful response (optional)
+          isDarkMode = !isDarkMode; // Toggle the value
+          localStorage.setItem("isDarkMode", isDarkMode);
+        })
+        .fail(function(error) {
+          console.error("API error:", isDarkMode); // Handle errors
+        });
+    });
+
+    // แจ้งเตือนการออนไลน์/ออฟไลน์
+    // Initialize toasts
+    const offlineToast = new bootstrap.Toast(document.getElementById('offlineToast'));
+    const onlineToast = new bootstrap.Toast(document.getElementById('onlineToast'));
+
+    // Variable to track if we were previously offline
+    let wasOffline = false;
+    let checkInProgress = false;
+    let isCurrentlyOnline = false; // เพิ่มตัวแปรเพื่อติดสถานะปัจจุบัน
+
+    // Initial check with real internet connectivity
+    checkInternetConnection();
+    updateConnectionUI(checkConnection());
+
+    // Set up periodic checks (every 5 seconds)
+    setInterval(checkInternetConnection, 5000);
+
+    // Check internet connection
+    function checkConnection() {
+      return navigator.onLine;
+    }
+
+    // Function for real internet connectivity check
+    async function checkInternetConnection() {
+      if (checkInProgress) return;
+      checkInProgress = true;
+
+      try {
+        // Try to fetch a small resource with a random parameter to prevent caching
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+        // ถ้าต้องการถี่กว่านั้นให้เปลี่ยนไป Ping ที่ Server ของเรา /ping.json?t=
+        const response = await fetch('https://www.gstatic.com/generate_204?nocache=' + new Date().getTime(), {
+          mode: 'no-cors',
+          cache: 'no-cache',
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        // If we get here, we have internet access
+        isCurrentlyOnline = true;
+        updateConnectionUI(true);
+      } catch (error) {
+        // Request failed or timed out - we don't have internet
+        isCurrentlyOnline = false;
+        updateConnectionUI(false);
+        console.log('Error checking connection: ' + (error.message || 'Request failed'));
+      }
+
+      checkInProgress = false;
+    }
+
+    // Function to update UI based on connection status
+    function updateConnectionUI(isOnline) {
+      const $statusIndicator = $('#connection-status .status-indicator');
+      const $statusText = $('#connection-status');
+
+      if (isOnline) {
+        $statusIndicator.removeClass('status-offline').addClass('status-online');
+        $statusText.html('<span class="status-indicator status-online"></span> Online');
+
+        // If we were previously offline, show the online toast and hide the offline toast
+        if (wasOffline) {
+          offlineToast.hide();
+          onlineToast.show();
+          wasOffline = false;
+        }
+      } else {
+        $statusIndicator.removeClass('status-online').addClass('status-offline');
+        $statusText.html('<span class="status-indicator status-offline"></span> Offline');
+
+        // Only show the toast if this is a new offline state
+        if (!wasOffline) {
+          offlineToast.show();
+        }
+        wasOffline = true;
+
+        // ให้ Toast ค้างไว้เมื่อยังออฟไลน์อยู่
+        if (!isCurrentlyOnline) {
+          const offlineToastElement = document.getElementById('offlineToast');
+          offlineToastElement.classList.remove('hide');
+          offlineToastElement.classList.add('show');
+        }
+      }
+    }
+    // END แจ้งเตือนการออนไลน์/ออฟไลน์
+  });
+
+  $(window).on("load", function() {
+    if (feather) {
+      feather.replace({
+        width: 14,
+        height: 14,
+      });
+    }
+  });
+
+  // Function to show the loading overlay
+  function showLoading() {
+    $('#loadingOverlay').removeClass('hidden');
+  }
+
+  // Function to hide the loading overlay
+  function hideLoading() {
+    $('#loadingOverlay').addClass('hidden');
+  }
+</script>

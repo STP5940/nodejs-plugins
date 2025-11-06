@@ -1,0 +1,220 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model T_Users {
+  User_id             BigInt    @id @map("User_id")
+  Usersrole_id        Int       @map("Usersrole_id")
+  firstname           String?   @db.VarChar(100)
+  lastname            String?   @db.VarChar(100)
+  username            String    @db.VarChar(100)
+  password            String    @db.VarChar(200)
+  mail                String    @db.VarChar(200)
+  mailconfirm         Boolean   @default(false) @db.Bit
+  phone               String?   @db.VarChar(100)
+  failedLoginAttempts Int       @default(0)
+  lastFailedLogin     DateTime? @db.DateTime
+  lockUntil           DateTime? @db.DateTime
+  active              Boolean   @default(true) @db.Bit
+  created_at          DateTime? @db.DateTime
+  updated_at          DateTime? @db.DateTime
+  deleted_at          DateTime? @db.DateTime
+
+  T_Twofactor T_Twofactor?
+  T_Company   T_Company?
+  T_Employee  T_Employee?
+
+  SYS_Signinlogs SYS_Signinlogs[]
+  SYS_Userlogs   SYS_Userlogs[]
+
+  TM_Usersrole TM_Usersrole @relation(fields: [Usersrole_id], references: [Usersrole_id])
+
+  // Define primary key constraint
+  @@map(name: "T_Users")
+}
+
+model T_Company {
+  Company_id Int       @id @default(autoincrement()) @map("Company_id")
+  User_id    BigInt    @unique @map("User_id")
+  name       String    @db.VarChar(100) // ชื่อบริษัท
+  profile    String?   @db.VarChar(100) //โลโกบริษัท
+  phone      String?   @db.VarChar(100) // หมายเลขโทรศัพท์
+  logoreport String?   @db.VarChar(100) // โลโกสำหรับรายงาน
+  website    String?   @db.VarChar(255) // ลิงค์เว็บไซต์บริษัท
+  taxid      String?   @db.VarChar(20) // เลขประจำตัวผู้เสียภาษี
+  fax        String?   @db.VarChar(20) // หมายเลขแฟกซ์
+  nameTh     String?   @db.VarChar(100) // ชื่อบริษัท - ภาษาไทย
+  addressTh  String?   @db.VarChar(255) // ที่อยู่ - ภาษาไทย
+  nameEn     String?   @db.VarChar(100) // ชื่อบริษัท - ภาษาอังกฤษ
+  addressEn  String?   @db.VarChar(255) // ที่อยู่ - ภาษาอังกฤษ
+  created_at DateTime? @db.DateTime
+  updated_at DateTime? @db.DateTime
+  deleted_at DateTime? @db.DateTime
+
+  T_Users                 T_Users                   @relation(fields: [User_id], references: [User_id])
+
+  // Define primary key constraint
+  @@map(name: "T_Company")
+}
+
+model T_Employee {
+  Employee_id Int       @id @default(autoincrement()) @map("Employee_id")
+  User_id     BigInt    @unique @map("User_id")
+  Company_id  Int       @map("Company_id")
+  profile     String?   @db.VarChar(100)
+  created_at  DateTime? @db.DateTime
+  updated_at  DateTime? @db.DateTime
+  deleted_at  DateTime? @db.DateTime
+
+  // Relation to T_Users model
+  T_Users                 T_Users                   @relation(fields: [User_id], references: [User_id])
+
+  // Composite primary key declaration
+  @@map(name: "T_Employee")
+}
+
+model T_Twofactor {
+  Twofactor_id   String   @id @map("Twofactor_id")
+  User_id        BigInt   @unique @map("User_id")
+  active         Boolean? @default(false) @db.Bit
+  signinaccount  Boolean? @default(false) @db.Bit
+  changepassword Boolean? @default(false) @db.Bit
+
+  T_Users T_Users @relation(fields: [User_id], references: [User_id])
+
+  // Define primary key constraint
+  @@map(name: "T_Twofactor")
+}
+
+model TM_Usersrole {
+  Usersrole_id Int       @id @map("Usersrole_id")
+  description  String?   @db.VarChar(50)
+  core         Boolean   @default(false) @db.Bit
+  priority     Int?      @default(3)
+  created_at   DateTime? @db.DateTime
+  updated_at   DateTime? @db.DateTime
+  deleted_at   DateTime? @db.DateTime
+  User_id      BigInt?   @map("User_id")
+
+  T_Users                 T_Users[]
+  TM_UsersrolePermissions TM_UsersrolePermissions[]
+
+  // Define primary key constraint
+  @@map(name: "TM_Usersrole")
+}
+
+model TM_Permissions {
+  Permissions_id Int       @id @map("Permissions_id")
+  prefix         String    @db.VarChar(1) // Only 'F': Form or 'R': Report
+  controller     String    @db.VarChar(100)
+  name           String    @db.VarChar(100)
+  read           Boolean   @default(true) @db.Bit // Permission: Read
+  update         Boolean   @default(true) @db.Bit // Permission: Update
+  create         Boolean   @default(true) @db.Bit // Permission: Create
+  delete         Boolean   @default(true) @db.Bit // Permission: Delete
+  companyonly    Boolean   @default(false) @db.Bit
+  created_at     DateTime? @db.DateTime
+  updated_at     DateTime? @db.DateTime
+  deleted_at     DateTime? @db.DateTime
+
+  TM_UsersrolePermissions TM_UsersrolePermissions[]
+
+  // Define primary key constraint
+  @@map(name: "TM_Permissions")
+}
+
+model TM_UsersrolePermissions {
+  Usersrole_id   Int     @map("Usersrole_id")
+  Permissions_id Int     @map("Permissions_id")
+  read           Boolean @default(true) @db.Bit // Permission: Read
+  update         Boolean @default(true) @db.Bit // Permission: Update
+  create         Boolean @default(true) @db.Bit // Permission: Create
+  delete         Boolean @default(true) @db.Bit // Permission: Delete
+
+  TM_Usersrole   TM_Usersrole   @relation(fields: [Usersrole_id], references: [Usersrole_id])
+  TM_Permissions TM_Permissions @relation(fields: [Permissions_id], references: [Permissions_id])
+
+  // Define primary key constraint
+  @@id([Usersrole_id, Permissions_id]) // Define composite primary key
+  @@map(name: "TM_UsersrolePermissions")
+}
+
+model T_Lineconfig {
+  Lineconfig_id Int       @id @default(autoincrement()) @map("Lineconfig_id")
+  Company_id    Int       @map("Company_id")
+  accessToken   String?   @db.VarChar(300)
+  secret        String?   @db.VarChar(100)
+  groupId       String?   @db.VarChar(100)
+  cmnew         Boolean   @default(false) @db.Bit // แจ้งเตือน CM ใหม่
+  pmnew         Boolean   @default(false) @db.Bit // แจ้งเตือน PM ใหม่
+  cmcomplete    Boolean   @default(false) @db.Bit // แจ้งเตือน CM เสร็จสิ้น
+  pmcomplete    Boolean   @default(false) @db.Bit // แจ้งเตือน PM เสร็จสิ้น
+  created_at    DateTime? @db.DateTime
+  updated_at    DateTime? @db.DateTime
+
+  // Composite primary key declaration
+  @@map(name: "T_Lineconfig")
+}
+
+model SYS_Signinlogs {
+  Signinlog_id Int       @default(autoincrement()) @map("Signinlog_id")
+  ipcurrent    String?   @db.VarChar(50)
+  device       String?   @db.VarChar(100)
+  browser      String?   @db.VarChar(100)
+  platform     String?   @db.VarChar(100)
+  session      String    @id @db.VarChar(100)
+  created_at   DateTime? @db.DateTime
+  deleted_at   DateTime? @db.DateTime
+  User_id      BigInt    @map("User_id") // แก้ไขเป็น BigInt เพื่อตรงกับ T_Users
+
+  T_Users T_Users @relation(fields: [User_id], references: [User_id])
+
+  // Define primary key constraint
+  @@map(name: "SYS_Signinlogs")
+}
+
+model SYS_Masterkeygen {
+  tableName      String    @map("tableName")
+  Company_id     Int       @map("Company_id")
+  prefix         String    @db.VarChar(5)
+  masterkeygenId BigInt    @map("masterkeygenId")
+  updated_at     DateTime? @db.DateTime
+
+  // Define primary key constraint
+  @@id([tableName, Company_id]) // Define composite primary key
+  @@map(name: "SYS_Masterkeygen")
+}
+
+// ออกแบบไว้ก่อน ยังไม่ใช้
+model SYS_Userlogs {
+  UserLog_id      Int      @id @default(autoincrement()) @map("UserLog_id")
+  timestamp       DateTime @default(now()) // เวลาที่บันทึก log (ค่าเริ่มต้นเป็นเวลาปัจจุบัน)
+  executionTime   Float // ระยะเวลาที่ใช้ในการประมวลผล (วัดเป็นวินาที) ex: 0.123
+  logLevel        String   @db.VarChar(10) // ระดับความสำคัญของ log (INFO, ERROR, DEBUG, ฯลฯ)
+  username        String   @db.VarChar(100) // ชื่อผู้ใช้งาน
+  controller      String   @db.VarChar(100)
+  function        String   @db.VarChar(50)
+  method          String   @db.VarChar(10)
+  route           String   @db.VarChar(100)
+  statusCode      Int
+  ipAddress       String   @db.VarChar(50)
+  requestPayload  String?  @db.NVarChar(Max) // Optional field ข้อมูลที่ส่งมาใน request (Optional)
+  responsePayload String?  @db.NVarChar(Max) // Optional field ข้อมูลที่ตอบกลับไปยังผู้ใช้งาน (Optional)
+  userAgent       String   @db.VarChar(100) // ข้อมูลของ browser หรือ client ที่ผู้ใช้ใช้
+  User_id         BigInt   @map("User_id")
+
+  T_Users T_Users @relation(fields: [User_id], references: [User_id])
+
+  @@map(name: "SYS_Userlogs")
+}

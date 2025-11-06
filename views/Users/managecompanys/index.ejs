@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Managecompanys</title>
+  <%- include('../../Layout/tagHead') %>
+
+  <style>
+    @media (max-width: 767px) {
+      /* .table-responsive .dropdown-menu {
+        position: static !important;
+      } */
+    }
+
+    @media (min-width: 1000px) {
+      .table-responsive {
+        overflow: visible !important;
+      }
+    }
+  </style>
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include('../../Layout/appheader', { Menuname: "_managecompanys" }) %>
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Main Menu-->
+  <%- include('../../Layout/appmenu', { Menuname: "_managecompanys" }) %>
+  <!-- END: Main Menu-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+      <%- include('../../Layout/appbreadcrumb', { Menuname: "_managecompanys" }) %>
+
+
+      <div class="content-body">
+
+        <!-- Striped rows start -->
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+
+              <div class="card-header border-bottom py-1">
+                <h4 class="card-title" data-language="_managecompanys">
+                  <!-- จัดการผู้ใช้ -->
+                </h4>
+                <!-- <button type="button" class="btn btn-primary"><i data-feather='plus-square'></i> <i data-feather='plus'></i> เพื่มข้อมูล</button> -->
+                <a type="button" href="/user/managecompanys/create" class="btn btn-primary waves-effect round">
+                  <!-- <i data-feather='plus-square'></i> -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                  </svg>
+                  <span data-language="_managecompanyscreate">
+                    <%= translat._managecompanyscreate %>
+                    <!-- เพื่มข้อมูล -->
+                  </span>
+                </a>
+              </div>
+
+
+              <div class="card-body pt-1">
+                <div class="table-responsive">
+                  <table id="companysTable" class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th hidden>ID</th>
+                        <th style="width: 6%; text-align: center;" class="no-search">#</th>
+                        <th style="width: 18%;" data-language="_companyname">
+                          <!-- ชื่อบริษัท -->
+                        </th>
+                        <th style="width: 13%; text-align: center;" data-language="_username">
+                          <!-- ชื่อผู้ใช้ -->
+                        </th>
+                        <th style="width: 16%; text-align: center;" data-language="_companyphone">
+                          <!-- เบอร์โทรศัพท์ (บริษัท) -->
+                        </th>
+                        <th style="width: 10%; text-align: center;" class="no-search" data-language="_employee">
+                          <!-- พนักงาน -->
+                        </th>
+                        <th style="width: 11%; text-align: center;" class="no-search" data-language="_company_status">
+                          <!-- สถานะบริษัท -->
+                        </th>
+                        <th style="width: 11%; text-align: center;" class="no-search" data-language="_confirm_email">
+                          <!-- ยืนยันอีเมล์ -->
+                        </th>
+                        <th style="width: 10%; text-align: center;" class="no-search" data-language="_operations">
+                          <!-- ดำเนินการ -->
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <% companys.forEach((company, companyIndex) => { %>
+                      <tr>
+                        <td hidden><%= company.User_id %></td>
+                        <td style="text-align: center;"><%= companyIndex+1 %></td>
+                        <td>
+                          <img class="me-75 round" alt="logoCompany" height="20" width="20" onerror="this.src='/app-assets/images/portrait/small/avatar.png';" src="<%= company.profile %>" />
+                          <span class="fw-bold"><%= company.name %></span>
+                        </td>
+                        <td>
+                          <%= company.T_Users.username %>
+                        </td>
+                        <td style="text-align: center;">
+                          <%= company.phone %>
+                        </td>
+                        <td>
+                          <div style="display: flex; justify-content: center;" class="avatar-group">
+                            <% if(company?.employeeDetails.length >= 1){ %>
+
+                            <% company?.employeeDetails.forEach(employeeDetail => { %>
+                            <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar pull-up my-0" title="<%= employeeDetail?.T_Users?.username %>">
+                              <img src="<%= employeeDetail?.profile %>" alt="Avatar" height="26" width="26" />
+                            </div>
+                            <% }); %>
+
+                            <% if(company?.countEmployee >= 1){ %>
+                            <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar bg-primary" title="<%= company?.countEmployee %> Others">
+                              <div class="avatar-content">+<%= company?.countEmployee %></div>
+                            </div>
+                            <% } %>
+
+                            <% }else{ %>
+                            <span class="badge rounded-pill badge-light-warning me-1" data-language="_not_found">
+                              <!-- ไม่พบข้อมูล -->
+                            </span>
+                            <% } %>
+                          </div>
+                        </td>
+                        <td style="text-align: center;">
+                          <span class="badge rounded-pill <%= company.T_Users.active ? 'badge-light-success' : 'badge-light-danger' %> me-1">
+                            <%- company.T_Users.active ? '<div data-language="_account_active"><!-- เปิดใช้งาน --></div>' : '<div data-language="_account_lock"><!-- ล็อคบัญชี --></div>' %>
+                          </span>
+                        </td>
+                        <td style="text-align: center;">
+                          <span class="badge rounded-pill <%= company.T_Users.mailconfirm ? 'badge-light-success' : 'badge-light-warning' %> me-1">
+                            <%- company.T_Users.mailconfirm ? '<div data-language="_confirm_success"><!-- ยืนยันสำเร็จ --></div>' : '<div data-language="_pending"><!-- รอดำเนินการ --></div>' %>
+                          </span>
+                        </td>
+                        <td style="text-align: center;">
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-outline-primary hide-arrow dropdown-toggle btn-sm" data-bs-toggle="dropdown" aria-expanded="false">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                              </svg>
+                              <span data-language="_operations">
+                                <!-- การดำเนินการ -->
+                              </span>
+                            </button>
+                            <div class="dropdown-menu menu-option py-25">
+                              <a class="dropdown-item" href="/user/managecompanys/edit/<%= encryptText(company.Company_id.toString()) %>">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
+                                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                <span data-language="_edit_information">
+                                  <!-- แก้ไขข้อมูล -->
+                                </span>
+                              </a>
+                              <!-- <a class="dropdown-item disabled" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy">
+                                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg> คัดลอก
+                              </a> -->
+                              <a type="button" data-bs-toggle="modal" data-bs-target="#large_<%= encryptText(company.Company_id.toString()) %>" class="dropdown-item" href="#" onclick="event.preventDefault();">
+                                <!-- <i data-feather="lock"></i> -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock">
+                                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg>
+                                <span data-language="_change_password">
+                                  <!-- เปลี่ยนรหัสผ่าน -->
+                                </span>
+                              </a>
+                              <a class="dropdown-item twofactorOffCompanyBtn" companyUsername="<%= company?.T_Users?.username %>" companyId="<%= encryptText(company.Company_id.toString()) %>" href="#" onclick="event.preventDefault();">
+                                <!-- <i data-feather="shield"></i> -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield">
+                                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                                <span data-language="_twofactor_off">
+                                  <!-- ปิดใช้งานการยืนยันตัวตน 2FA -->
+                                </span>
+                              </a>
+                              <div class="dropdown-divider my-25"></div>
+                              <a class="dropdown-item btn btn-danger deleteCompanyBtn mx-25 px-1 py-75" companyUsername="<%= company?.T_Users?.username %>" companyId="<%= encryptText(company.Company_id.toString()) %>">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2">
+                                  <polyline points="3 6 5 6 21 6"></polyline>
+                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                                <span data-language="_delete_information">
+                                  <!-- ลบข้อมูล -->
+                                </span>
+                              </a>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      <% }); %>
+
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <th hidden></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- Striped rows end -->
+      </div>
+
+    </div>
+  </div>
+
+  <% companys.forEach(company => { %>
+  <!-- Modal -->
+  <div class="modal fade text-start" id="large_<%= encryptText(company.Company_id.toString()) %>" tabindex="-1" aria-labelledby="ModalLabel17" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="ModalLabel17" data-language="_change_password">
+            <!-- เปลี่ยนรหัสผ่าน -->
+          </h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form onsubmit="return false" class="validate-form" id="<%= encryptText(company.Company_id.toString()) %>">
+
+          <input type="hidden" class="userId" value="<%= encryptText(company?.T_Users?.User_id.toString()) %>">
+          <div class="modal-body">
+            <!-- <%= company?.T_Users?.User_id %>, <%= company?.name %>, <%= company?.T_Users?.username %> -->
+
+            <div class="row">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                <label class="form-label" for="companyname_<%= encryptText(company.Company_id.toString()) %>" data-language="_companyname">
+                  <!-- ชื่อบริษัท -->
+                </label>
+                <div class="input-group input-group-merge">
+                  <input type="text" value="<%= company?.name %>" class="form-control" id="companyname_<%= encryptText(company.Company_id.toString()) %>" data-language-placeholder="_enter_companyname" disabled />
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                <label class="form-label" for="username_<%= encryptText(company.Company_id.toString()) %>" data-language="_username">
+                  <!-- ชื่อผู้ใช้ -->
+                </label>
+                <div class="input-group input-group-merge">
+                  <input type="text" value="<%= company?.T_Users?.username %>" class="form-control" id="username_<%= encryptText(company.Company_id.toString()) %>" data-language-placeholder="_enter_username" disabled />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12 col-sm-12 mb-1">
+
+                <label class="form-label required-field" for="new_password_<%= encryptText(company.Company_id.toString()) %>" data-language="_new_password">
+                  <!-- รหัสผ่าน -->
+                </label>
+                <div class="input-group form-password-toggle input-group-merge">
+                  <input type="password" class="form-control" id="new_password_<%= encryptText(company.Company_id.toString()) %>" name="new_password_<%= encryptText(company.Company_id.toString()) %>" autocomplete="off" data-language-placeholder="_enter_new_password" required />
+                  <div class="input-group-text cursor-pointer"><i data-feather="eye"></i></div>
+                </div>
+                <span id="error_<%= encryptText(company.Company_id.toString()) %>" class="text-danger" style="display: none;">Please enter your Password</span>
+
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <p class="fw-bolder">
+                  <span data-language="_password_requirements"></span>
+                  <!-- ข้อกำหนดรหัสผ่าน -->:
+                </p>
+                <ul class="ps-1 ms-25">
+                  <li class="mb-50" data-language="_password_min_long">
+                    <!-- Enter at least 10 characters. -->
+                  </li>
+                  <li class="mb-50" data-language="_password_lowercase">
+                    <!-- Must contain at least one lowercase letter (a-z). -->
+                  </li>
+                  <li class="mb-50" data-language="_password_uppercase">
+                    <!-- Must contain at least one uppercase letter (A-Z). -->
+                  </li>
+                  <li data-language="_password_character">
+                    <!-- Must contain at least 1 symbols or spaces. -->
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" id="btnDisabled_<%= encryptText(company.Company_id.toString()) %>" class="btn btn-primary me-1" data-language="_save_changes">
+              <!-- Save changes -->
+            </button>
+            <!-- <button type="button" companyId="<%= encryptText(company.Company_id.toString()) %>" class="btn btn-primary savePassword" data-bs-dismiss="modal">บันทึกข้อมูล</button> -->
+            <!-- <button type="button" companyId="<%= encryptText(company.Company_id.toString()) %>" class="btn btn-primary">บันทึกข้อมูล</button> -->
+            <button type="button" class="btn btn-outline-danger waves-effect waves-float waves-light" data-bs-dismiss="modal" data-language="_discard">
+              <!-- ยกเลิก -->
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <% }); %>
+
+  <!-- END: Content-->
+  <!-- <div class="sidenav-overlay"></div> -->
+  <!-- <div class="drag-target"></div> -->
+  <!-- BEGIN: Footer-->
+  <%- include('../../Layout/appfooter') %>
+
+  <%- include('../../Layout/scriptFooter') %>
+
+  <!-- BEGIN: Page JS-->
+  <script src="../app-scriptPage/managecompanys/page-user-managecompanys.index.js"></script>
+  <script src="../app-validateForm/managecompanys/page-user-managecompanys.index.js"></script>
+  <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

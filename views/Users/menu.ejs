@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<!-- <html class="loading dark-layout" lang="en" data-textdirection="ltr"> -->
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Menu</title>
+
+  <!-- BEGIN: Theme CSS-->
+  <link rel="stylesheet" type="text/css" href="../app-assets/css/components.min.css">
+
+  <%- include('../Layout/tagHead') %>
+
+  <!-- BEGIN: Page CSS-->
+  <link rel="stylesheet" type="text/css" href="../app-assets/css/pages/dashboard-ecommerce.css">
+  <!-- END: Page CSS-->
+
+  <style>
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 8%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-hover:hover {
+      box-shadow: 0 4px 25px 0 rgba(34, 41, 47, .25);
+      -webkit-transform: translateY(-5px);
+      -ms-transform: translateY(-5px);
+      transform: translateY(-5px);
+    }
+
+    .card-hover:hover img {
+      transform: translateY(-5px);
+    }
+
+    .card-hover img {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .codeStyle {
+      font-size: 11.5px;
+      font-family: 'Roboto Condensed', 'Arial Narrow', sans-serif;
+      font-stretch: condensed;
+      /* letter-spacing: -0.1px; */
+    }
+
+    .cardDisabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+
+      a {
+        cursor: not-allowed;
+      }
+    }
+  </style>
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include('../Layout/appheader', { Menuname: "_menu" }) %>
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content" style="padding: calc(2rem + 3rem* 2 + 1.3rem) 2rem 0 2rem;">
+    <div class="content-overlay"></div>
+    <!-- <div class="header-navbar-shadow"></div> -->
+    <div class="content-wrapper">
+
+      <div class="content-body">
+        <section id="menu-app">
+          <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-12 col-lg-11 col-xl-9 col-xxl-8 text-center">
+              <div class="row mt-0">
+
+                <% if ([1].includes(use.priority)) { %>
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+                  <div class="card card-hover py-1">
+                    <a style="color: inherit;" href="/user/dashboard">
+                      <div id="arrow" class="card-body text-center px-25 py-75">
+                        <img width="50px" class="rounded-1 mb-50" src="/app-assets/images/icons/menu/sale.svg" rel="preload">
+                        <p class="card-text mb-0" data-language="_dashboard">
+                          <!-- แผงควบคุม -->
+                        </p>
+                      </div>
+                    </a>
+                    <% if (process.env.DEBUG === 'true') { %>
+                    <code class="mx-25 codeStyle">Dashboard</code>
+                    <% } %>
+                  </div>
+                </div>
+                <% } %>
+
+                <% if (use?.permission['SecurityController']?.read || [1].includes(use.priority)) { %>
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+                  <div class="card card-hover py-1">
+                    <a style="color: inherit;" href="/user/security">
+                      <div id="arrow" class="card-body text-center px-25 py-75">
+                        <img width="50px" class="rounded-1 mb-50 user-select-none" src="/app-assets/images/icons/menu/access.png" rel="preload">
+                        <p class="card-text mb-0" data-language="_security">
+                          <!-- ความปลอดภัย -->
+                        </p>
+                      </div>
+                    </a>
+                    <% if (process.env.DEBUG === 'true') { %>
+                    <code class="mx-25 codeStyle">Security</code>
+                    <% } %>
+                  </div>
+                </div>
+                <% } %>
+
+                <% if (use?.permission['TwofactorController']?.read || [1].includes(use.priority)) { %>
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+                  <div class="card card-hover py-1">
+                    <a style="color: inherit;" href="/user/twofactor">
+                      <div id="arrow" class="card-body text-center px-25 py-75">
+                        <img width="50px" class="rounded-1 mb-50 user-select-none" src="/app-assets/images/icons/menu/validation.svg" rel="preload">
+                        <p class="card-text mb-0" data-language="_twofactor">
+                          <!-- ตั้งค่า Two-Factor -->
+                        </p>
+                      </div>
+                    </a>
+                    <% if (process.env.DEBUG === 'true') { %>
+                    <code class="mx-25 codeStyle">Twofactor</code>
+                    <% } %>
+                  </div>
+                </div>
+                <% } %>
+
+                <% if (use?.permission['AccessrolesController']?.read || [1].includes(use.priority)) { %>
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+                  <div class="card card-hover py-1">
+                    <a style="color: inherit;" href="/user/accessroles">
+                      <div id="arrow" class="card-body text-center px-25 py-75">
+                        <img width="50px" class="rounded-1 mb-50 user-select-none" src="/app-assets/images/icons/menu/group.svg" rel="preload">
+                        <p class="card-text mb-0" data-language="_accessroles">
+                          <!-- กลุ่มสมาชิก -->
+                        </p>
+                      </div>
+                    </a>
+                    <% if (process.env.DEBUG === 'true') { %>
+                    <code class="mx-25 codeStyle">Accessroles</code>
+                    <% } %>
+                  </div>
+                </div>
+                <% } %>
+
+
+                <% if ([1].includes(use.priority)) { %>
+                <!-- 
+                //    เมนูของแอดมินเท่านั้น ไม่ต้องเช็คสิทธิ CRUD เช็คแค่ priority เป็น 1
+                //    รหัสโมดูลขึ้นต้นด้วย F-3XX 
+                -->
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+                  <div class="card card-hover py-1">
+                    <a style="color: inherit;" href="/user/managecompanys">
+                      <div id="arrow" class="card-body text-center px-25 py-75">
+                        <img width="50px" class="rounded-1 mb-50 user-select-none" src="/app-assets/images/icons/menu/website_forum.svg" rel="preload">
+                        <p class="card-text mb-0" data-language="_managecompanys">
+                          <!-- ข้อมูลบริษัท -->
+                        </p>
+                      </div>
+                    </a>
+                    <% if (process.env.DEBUG === 'true') { %>
+                    <code class="mx-25 codeStyle">Managecompanys</code>
+                    <% } %>
+                  </div>
+                </div>
+
+
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+                  <div class="card card-hover py-1">
+                    <a style="color: inherit;" href="/user/accesspermissions">
+                      <div id="arrow" class="card-body text-center px-25 py-75">
+                        <img width="50px" class="rounded-1 mb-50 user-select-none" src="/app-assets/images/icons/menu/survey.svg" rel="preload">
+                        <p class="card-text mb-0" data-language="_accesspermissions">
+                          <!-- จัดการเมนู -->
+                        </p>
+                      </div>
+                    </a>
+                    <% if (process.env.DEBUG === 'true') { %>
+                    <code class="mx-25 codeStyle">Accesspermissions</code>
+                    <% } %>
+                  </div>
+                </div>
+                <% } %>
+
+
+                <% if (use?.permission['ManageemployeesController']?.read && [2].includes(use.priority)) { %>
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+                  <div class="card card-hover py-1">
+                    <a style="color: inherit;" href="/user/manageemployees">
+                      <div id="arrow" class="card-body text-center px-25 py-75">
+                        <img width="50px" class="rounded-1 mb-50 user-select-none" src="/app-assets/images/icons/menu/employees.svg" rel="preload">
+                        <p class="card-text mb-0" data-language="_manageemployees">
+                          <!-- ข้อมูลพนักงาน -->
+                        </p>
+                      </div>
+                    </a>
+                    <% if (process.env.DEBUG === 'true') { %>
+                    <code class="mx-25 codeStyle">Manageemployees</code>
+                    <% } %>
+                  </div>
+                </div>
+                <% } %>
+
+                <% pluginMenus.forEach((pluginMenu, pluginMenuIndex) => { %>
+                <% if (pluginMenu?.display === true) { %>
+
+                <!-- Start: เช็คสิทธิเข้าถึงเมนู -->
+                <!-- [2].includes(use.priority) -->
+                <% if (use?.permission[pluginMenu?.controller]?.read && use.priority >= 2) { %>
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+                  <div class="card card-hover py-1">
+                    <a style="color: inherit;" href="/user/plugins/<%= `${pluginMenu?.plugin}${pluginMenu?.url || ''}` %>">
+                      <div id="arrow" class="card-body text-center px-25 py-75">
+                        <img width="50px" class="rounded-1 mb-50 user-select-none" src="/user/plugins/<%= `${pluginMenu?.plugin}${pluginMenu?.icon}` %>" rel="preload">
+                        <p class="card-text mb-0" data-language="<%= pluginMenu?.title %>">
+                          <%= pluginMenu?.title %>
+                        </p>
+                      </div>
+                    </a>
+                    <% if (process.env.DEBUG === 'true') { %>
+                    <code class="mx-25 codeStyle"><%= pluginMenu?.code %></code>
+                    <% } %>
+                  </div>
+                </div>
+                <% } %>
+                <!-- End: เช็คสิทธิเข้าถึงเมนู -->
+
+                <% } %>
+                <% }); %>
+
+                <!-- รายการเมนูอื่น ๆ -->
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </div>
+
+  <%- include('../Layout/scriptFooter') %>
+
+  <!-- BEGIN: Page Vendor JS-->
+  <script src="../app-assets/vendors/js/charts/apexcharts.js"></script>
+  <!-- END: Page Vendor JS-->
+
+  <!-- BEGIN: Page JS-->
+  <script src="../app-scriptPage/page-user-index.js"></script>
+  <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

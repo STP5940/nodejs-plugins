@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Manageemployees.create</title>
+  <%- include('../../Layout/tagHead') %>
+
+  <script src="/app-assets/vendors/js/forms/cleave/cleave.min.js"></script>
+  <script src="/app-assets/vendors/js/forms/cleave/addons/cleave-phone.th.js"></script>
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include('../../Layout/appheader', { Menuname: "_manageemployees" }) %>
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Main Menu-->
+  <%- include('../../Layout/appmenu', { Menuname: "_manageemployeescreate" }) %>
+  <!-- END: Main Menu-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+      <%- include('../../Layout/appbreadcrumb', { Menuname: "_manageemployees=/user/manageemployees, _manageemployeescreate" }) %>
+
+
+      <div class="content-body">
+        <!-- Striped rows start -->
+        <div class="row">
+          <div class="col-12">
+
+            <div class="card">
+              <div class="card-header border-bottom py-1">
+                <h4 class="card-title" data-language="_manageemployeescreate">
+                  <!-- เพิ่มบริษัท -->
+                </h4>
+                <a type="button" href="/user/manageemployees" class="btn btn-primary waves-effect round">
+                  <!-- <i data-feather='arrow-left-circle'></i> -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 8 8 12 12 16"></polyline>
+                    <line x1="16" y1="12" x2="8" y2="12"></line>
+                  </svg>
+                  <span data-language="_back">
+                    <%= translat._back %>
+                    <!-- ย้อนกลับ -->
+                  </span>
+                </a>
+              </div>
+
+              <form class="validate-form" id="manageemployeescreateForm">
+                <div class="card-body pt-1">
+
+                  <% if(messages.success){ %>
+                  <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">
+                      <i data-feather="check-circle" class="me-50"></i>
+                      <span data-language="_success_title">
+                        <!-- _error_title -->
+                      </span>
+                    </h4>
+                    <div class="alert-body">
+                      <ul class="ps-1 ms-25">
+                        <li data-language="<%= messages.success %>"></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <% } %>
+
+                  <% if(messages.error){ %>
+
+                  <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">
+                      <!-- <i data-feather="x-circle" class="me-50"></i> -->
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle me-50">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                      </svg>
+                      <span data-language="_error_title">
+                        <!-- _error_title -->
+                      </span>
+                    </h4>
+                    <div class="alert-body">
+                      <ul class="ps-1 ms-25">
+                        <% messages.error.forEach(message => { %>
+                        <li data-language="<%= message %>"></li>
+                        <% }) %>
+                      </ul>
+                    </div>
+                  </div>
+                  <% } %>
+
+                  <input type="hidden" class="form-control" id="_csrfToken" value="<%- csrfToken %>">
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <!-- header section -->
+                      <div class="d-flex">
+                        <a href="#" class="me-25">
+                          <img src="/app-assets/images/portrait/small/avatar.png" onerror="this.src='/app-assets/images/portrait/small/avatar.png';" id="account-upload-img" class="uploadedAvatar rounded me-50" alt="profile image" height="100" width="100" />
+                        </a>
+                        <!-- upload and reset button -->
+                        <div class="d-flex align-items-end mt-75 ms-1">
+                          <div>
+                            <label for="account-upload" class="btn btn-sm btn-primary mb-75 me-75" data-language="_upload">
+                              <!-- Upload -->
+                            </label>
+                            <input type="file" name="account-upload" id="account-upload" hidden accept=".jpg, .jpeg, .png" />
+                            <button type="button" id="account-reset" class="btn btn-sm btn-outline-secondary mb-75" data-language="_reset">
+                              <!-- Reset -->
+                            </button>
+                            <br />
+                            <label class="mb-0" data-language="_allowed_file_types">
+                              <!-- Allowed file types -->
+                            </label>
+                            <label>: jpg, jpeg, png</label>
+                          </div>
+                        </div>
+                        <!--/ upload and reset button -->
+                      </div>
+                      <!--/ header section -->
+                    </div>
+                  </div>
+
+                  <div class="divider divider-start">
+                    <div class="divider-text">
+                      <h4 data-language="_manageemployees">
+                        <!-- ข้อมูลพนักงาน -->
+                      </h4>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 mb-1">
+                      <label class="form-label required-field" for="new_usersroleId" data-language="_accessroles">
+                        <!-- กลุ่มสมาชิก -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <select class="form-select" id="new_usersroleId" name="new_usersroleId" required>
+                          <option value="" selected disabled hidden data-language="_enter_roles">
+                            <!-- เลือกรายการกลุ่ม -->
+                          </option>
+                          <optgroup label="Core roles">
+                            <% rolesCore.forEach(roleCore => { %>
+                            <option value="<%= encryptText(roleCore?.Usersrole_id?.toString()) %>">- <%= roleCore?.description %></option>
+                            <% }); %>
+                          </optgroup>
+                          <% if (rolesSub.length) { %>
+                          <optgroup label="Company roles">
+                            <% rolesSub.forEach(roleSub => { %>
+                            <option value="<%= encryptText(roleSub?.Usersrole_id?.toString()) %>">- <%= roleSub?.description %></option>
+                            <% }); %>
+                          </optgroup>
+                          <% } %>
+
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label required-field" for="new_firstname" data-language="_firstname">
+                        <!-- ชื่อจริง -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control" id="new_firstname" name="new_firstname" data-language-placeholder="_enter_firstname" required />
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label required-field" for="new_lastname" data-language="_lastname">
+                        <!-- นามสกุล -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control" id="new_lastname" name="new_lastname" data-language-placeholder="_enter_lastname" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label required-field" for="new_mail" data-language="_mail">
+                        <!-- อีเมล์ -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control" id="new_mail" name="new_mail" data-language-placeholder="_enter_mail" required />
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label" for="new_phone" data-language="_phone">
+                        <!-- เบอร์โทรศัพท์ -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control account-number-mask" id="new_phone" name="new_phone" data-language-placeholder="_enter_phone" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label required-field" for="new_username" data-language="_username">
+                        <!-- ชื่อผู้ใช้ -->
+                      </label>
+                      <div class="input-group input-group-merge">
+                        <input type="text" class="form-control" id="new_username" name="new_username" autocomplete="new_username" data-language-placeholder="_enter_username" required />
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-1">
+                      <label class="form-label required-field" for="new_password" data-language="_password">
+                        <!-- รหัสผ่าน -->
+                      </label>
+                      <div class="input-group form-password-toggle input-group-merge">
+                        <input type="password" class="form-control" id="new_password" name="new_password" autocomplete="new_password" data-language-placeholder="_enter_password" required />
+                        <div class="input-group-text cursor-pointer"><i data-feather="eye"></i></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 my-1">
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="new_active" name="new_active" value="true" checked>
+                        <label style="user-select: none;" class="form-check-label text-warning" for="new_active" data-language="_employee_status_enabled">
+                          <!-- สถานะพนักงาน: เปิดใช้งาน -->
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-12 my-1">
+                      <p class="fw-bolder">
+                        <span data-language="_password_requirements"></span>
+                        <!-- ข้อกำหนดรหัสผ่าน -->:
+                      </p>
+                      <ul class="ps-1 ms-25">
+                        <li class="mb-50" data-language="_password_min_long">
+                          <!-- Enter at least 10 characters. -->
+                        </li>
+                        <li class="mb-50" data-language="_password_lowercase">
+                          <!-- Must contain at least one lowercase letter (a-z). -->
+                        </li>
+                        <li class="mb-50" data-language="_password_uppercase">
+                          <!-- Must contain at least one uppercase letter (A-Z). -->
+                        </li>
+                        <li data-language="_password_character">
+                          <!-- Must contain at least 1 symbols or spaces. -->
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div id="errorTitle" class="col-12 col-sm-12 my-1" style="display: none;">
+                      <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle me-50">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                          </svg>
+                          <%- translat['_error_title'] %>
+                        </h4>
+                        <div class="alert-body" id="errorMessageContainer">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="modal-footer">
+                  <button type="submit" id="btnDisabled" class="btn btn-primary me-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                      <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span data-language="_save_changes"></span>
+                    <!-- Save changes -->
+                  </button>
+                  <button type="reset" class="btn btn-outline-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rotate-ccw">
+                      <polyline points="1 4 1 10 7 10"></polyline>
+                      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    <span data-language="_discard"></span>
+                    <!-- Discard -->
+                  </button>
+                </div>
+              </form>
+
+            </div>
+
+          </div>
+        </div>
+        <!-- Striped rows end -->
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- END: Content-->
+  <!-- <div class="sidenav-overlay"></div> -->
+  <!-- <div class="drag-target"></div> -->
+  <!-- BEGIN: Footer-->
+  <%- include('../../Layout/appfooter') %>
+
+  <%- include('../../Layout/scriptFooter') %>
+
+  <!-- BEGIN: Page JS-->
+  <script src="/app-scriptPage/manageemployees/page-user-manageemployees.create.js"></script>
+  <script src="/app-validateForm/manageemployees/page-user-manageemployees.create.js"></script>
+  <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

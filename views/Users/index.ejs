@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<!-- <html class="loading dark-layout" lang="en" data-textdirection="ltr"> -->
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Home</title>
+
+  <!-- BEGIN: Theme CSS-->
+  <link rel="stylesheet" type="text/css" href="../app-assets/css/components.min.css">
+
+  <%- include('../Layout/tagHead') %>
+
+  <!-- BEGIN: Page CSS-->
+  <link rel="stylesheet" type="text/css" href="../app-assets/css/pages/dashboard-ecommerce.css">
+  <!-- END: Page CSS-->
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include('../Layout/appheader', { Menuname: "_dashboard" }) %>
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Main Menu-->
+  <%- include('../Layout/appmenu', { Menuname: "_dashboard" }) %>
+  <!-- END: Main Menu-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+      <%- include('../Layout/appbreadcrumb', { Menuname: "_dashboard" }) %>
+
+      <div class="content-body">
+        <!-- Kick start -->
+        <!-- <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Kick start your next project 🚀</h4>
+          </div>
+          <div class="card-body">
+            <div class="card-text">
+              <p>
+                Getting started with your project's custom requirements using a
+                ready-made template can be a challenging and time-consuming
+                process. However, this template provides useful features to kickstart
+                your project development with ease!
+              </p>
+              <ul>
+                <li>
+                  This template provides you with getting started pages featuring
+                  different layouts. You can use the layout that suits your custom
+                  requirements and simply adjust the branding, menu, and content.
+                </li>
+                <li>
+                  Every component in this template is decoupled, allowing you to
+                  use only the components you actually need! Easily remove unnecessary
+                  and extra code by excluding specific SCSS and JS files.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div> -->
+        <!--/ Page layout -->
+
+        <!-- Dashboard Ecommerce Starts -->
+        <section id="dashboard-ecommerce">
+
+          <!-- <div class="row match-height"> -->
+            <!-- Bar Chart - Orders -->
+            <!-- <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-2 col-xxl-2">
+              <div class="card">
+                <div class="card-body pb-50">
+                  <h6>Orders</h6>
+                  <h2 class="fw-bolder mb-1">2,76k</h2>
+                  <div id="statistics-order-chart"></div>
+                </div>
+              </div>
+            </div> -->
+            <!--/ Bar Chart - Orders -->
+
+            <!-- Line Chart - Profit -->
+            <!-- <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-2 col-xxl-2">
+              <div class="card card-tiny-line-stats">
+                <div class="card-body pb-50">
+                  <h6>Profit</h6>
+                  <h2 class="fw-bolder mb-1">6,24k</h2>
+                  <div id="statistics-profit-chart"></div>
+                </div>
+              </div>
+            </div> -->
+            <!--/ Line Chart - Profit -->
+
+            <!-- Statistics Card -->
+            <!-- <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4">
+              <div class="card card-statistics">
+                <div class="card-header">
+                  <h4 class="card-title">Statistics</h4>
+                  <div class="d-flex align-items-center">
+                    <p class="card-text font-small-2 me-25 mb-0">Updated 1 month ago</p>
+                  </div>
+                </div>
+                <div class="card-body statistics-body">
+                  <div class="row">
+                    <div class="col-xl-6 col-sm-6 col-12 mb-2 mb-xl-0">
+                      <div class="d-flex flex-row">
+                        <div class="avatar bg-light-primary me-2">
+                          <div class="avatar-content">
+                            <i data-feather="trending-up" class="avatar-icon"></i>
+                          </div>
+                        </div>
+                        <div class="my-auto">
+                          <h4 class="fw-bolder mb-0">230k</h4>
+                          <p class="card-text font-small-3 mb-0">Sales</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-6 col-sm-6 col-12 mb-2 mb-xl-0">
+                      <div class="d-flex flex-row">
+                        <div class="avatar bg-light-info me-2">
+                          <div class="avatar-content">
+                            <i data-feather="user" class="avatar-icon"></i>
+                          </div>
+                        </div>
+                        <div class="my-auto">
+                          <h4 class="fw-bolder mb-0">8.549k</h4>
+                          <p class="card-text font-small-3 mb-0">Customers</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <!--/ Statistics Card -->
+
+            <!-- Earnings Card -->
+            <!-- <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4">
+              <div class="card earnings-card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-6">
+                      <h4 class="card-title mb-1">Earnings</h4>
+                      <div class="font-small-2">This Month</div>
+                      <h5 class="mb-1">$4055.56</h5>
+                      <p class="card-text text-muted font-small-2">
+                        <span class="fw-bolder">68.2%</span><span> more earnings than last month.</span>
+                      </p>
+                    </div>
+                    <div class="col-6">
+                      <div id="earnings-chart"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <!--/ Earnings Card -->
+          <!-- </div> -->
+
+          <div class="row match-height">
+            <!-- Company Table Card -->
+            <div class="col-xl-12 col-12">
+              <div class="card card-company-table">
+                <div class="card-body p-0">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th style="width: 30%; text-align: center;">เลขที่เอกสาร</th>
+                          <th>ชื่องาน</th>
+                          <th>คะแนนการให้บริการ</th>
+                          <th>ข้อคิดเห็นสำหรับพนักงาน</th>
+                          <th>ข้อเสนอแนะถึงบริษัท</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <!-- <div class="avatar rounded">
+                                <div class="avatar-content">
+                                  <img src="../../../app-assets/images/icons/toolbox.svg" alt="Toolbar svg" />
+                                </div>
+                              </div> -->
+                              <div class="avatar rounded">
+                                <div class="avatar-content">
+                                  <img src="../../../app-assets/images/icons/parachute.svg" alt="Parachute svg" />
+                                </div>
+                              </div>
+                              <div>
+                                <div class="fw-bolder">CM2025061300001</div>
+                                <div class="font-small-2 text-muted">บริษัท เอ็นเตอร์ไพรส์ คอมพิวเตอร์ ซิสเท็มส์ (ประเทศไทย) จำกัด</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-nowrap">
+                            <div class="d-flex align-items-center">
+                              <div class="avatar bg-light-primary me-1">
+                                <div class="avatar-content">
+                                  <i data-feather="monitor" class="font-medium-3"></i>
+                                </div>
+                              </div>
+                              <span>ถังมีน้ำเข็งเกาะบริเวณวาวหมุน</span>
+                            </div>
+                          </td>
+                          <td class="text-nowrap">
+                            <div class="d-flex flex-column">
+                              <span class="font-small-2 text-muted">ถึง สมหมาย หวานเจี๋ยบ</span>
+                              <span class="fw-bolder mb-25">3 (ปานกลาง)</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex flex-column">
+                              <span class="font-small-2 text-muted">ถึง สมหมาย หวานเจี๋ยบ</span>
+                              <span class="font-small-3">
+                                พนักงานแอบเล่นมือถือ เลยทำงานช้าไปหน่อย
+                                และหลายๆครั้ง ก็ไม่สามารถตอบปัญหาที่ตรงคำถามได้ ทำให้เกิดความสับสนใจการทำงาน
+                              </span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex flex-column">
+                              <span class="font-small-2 text-muted">ถึง บริษัท</span>
+                              <span class="font-small-3">บริษัทควรดูแลพนักงาน ให้มีคุณภาพในการทำงานมากกว่านี้นะ</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="avatar rounded">
+                                <div class="avatar-content">
+                                  <img src="../../../app-assets/images/icons/book.svg" alt="book svg" />
+                                </div>
+                              </div>
+                              <div>
+                                <div class="fw-bolder">PM2025061300002</div>
+                                <div class="font-small-2 text-muted">บริษัท เอ็นเตอร์ไพรส์ คอมพิวเตอร์ ซิสเท็มส์ (ประเทศไทย) จำกัด</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="avatar bg-light-success me-1">
+                                <div class="avatar-content">
+                                  <i data-feather="coffee" class="font-medium-3"></i>
+                                </div>
+                              </div>
+                              <span>แก๊สหมด</span>
+                            </div>
+                          </td>
+                          <td class="text-nowrap">
+                            <div class="d-flex flex-column">
+                              <span class="font-small-2 text-muted">ถึง สมหมาย หวานเจี๋ยบ</span>
+                              <span class="fw-bolder mb-25">4 (ดี)</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex flex-column">
+                              <span class="font-small-2 text-muted">ถึง สมหมาย หวานเจี๋ยบ</span>
+                              <span class="font-small-3">-</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex flex-column">
+                              <span class="font-small-2 text-muted">ถึง บริษัท</span>
+                              <span class="font-small-3">-</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="avatar rounded">
+                                <div class="avatar-content">
+                                  <img src="../../../app-assets/images/icons/book.svg" alt="Brush svg" />
+                                </div>
+                              </div>
+                              <div>
+                                <div class="fw-bolder">PM2025061300003</div>
+                                <div class="font-small-2 text-muted">บริษัท เอ็นเตอร์ไพรส์ คอมพิวเตอร์ ซิสเท็มส์ (ประเทศไทย) จำกัด</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="avatar bg-light-warning me-1">
+                                <div class="avatar-content">
+                                  <i data-feather="watch" class="font-medium-3"></i>
+                                </div>
+                              </div>
+                              <span>ไฟหน้าจอเครื่องไม่ติด</span>
+                            </div>
+                          </td>
+                          <td class="text-nowrap">
+                            <div class="d-flex flex-column">
+                              <span class="font-small-2 text-muted">ถึง สมหมาย หวานเจี๋ยบ</span>
+                              <span class="fw-bolder mb-25">5 (ดีมาก)</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex flex-column">
+                              <span class="font-small-2 text-muted">ถึง สมหมาย หวานเจี๋ยบ</span>
+                              <span class="font-small-3">พนักงานทำงานเร็วมาก</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex flex-column">
+                              <span class="font-small-2 text-muted">ถึง บริษัท</span>
+                              <span class="font-small-3">-</span>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--/ Company Table Card -->
+
+            <!-- Transaction Card -->
+            <!-- <div class="col-xl-4 col-12">
+              <div class="card card-transaction">
+                <div class="card-header">
+                  <h4 class="card-title">Transactions</h4>
+                  <div class="dropdown chart-dropdown">
+                    <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a class="dropdown-item" href="#">Last 28 Days</a>
+                      <a class="dropdown-item" href="#">Last Month</a>
+                      <a class="dropdown-item" href="#">Last Year</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="transaction-item">
+                    <div class="d-flex">
+                      <div class="avatar bg-light-primary rounded float-start">
+                        <div class="avatar-content">
+                          <i data-feather="pocket" class="avatar-icon font-medium-3"></i>
+                        </div>
+                      </div>
+                      <div class="transaction-percentage">
+                        <h6 class="transaction-title">Wallet</h6>
+                        <small>Starbucks</small>
+                      </div>
+                    </div>
+                    <div class="fw-bolder text-danger">- $74</div>
+                  </div>
+                  <div class="transaction-item">
+                    <div class="d-flex">
+                      <div class="avatar bg-light-success rounded float-start">
+                        <div class="avatar-content">
+                          <i data-feather="check" class="avatar-icon font-medium-3"></i>
+                        </div>
+                      </div>
+                      <div class="transaction-percentage">
+                        <h6 class="transaction-title">Bank Transfer</h6>
+                        <small>Add Money</small>
+                      </div>
+                    </div>
+                    <div class="fw-bolder text-success">+ $480</div>
+                  </div>
+                  <div class="transaction-item">
+                    <div class="d-flex">
+                      <div class="avatar bg-light-info rounded float-start">
+                        <div class="avatar-content">
+                          <i data-feather="trending-up" class="avatar-icon font-medium-3"></i>
+                        </div>
+                      </div>
+                      <div class="transaction-percentage">
+                        <h6 class="transaction-title">Transfer</h6>
+                        <small>Refund</small>
+                      </div>
+                    </div>
+                    <div class="fw-bolder text-success">+ $98</div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <!--/ Transaction Card -->
+          </div>
+
+        </section>
+        <!-- Dashboard Ecommerce ends -->
+      </div>
+
+    </div>
+  </div>
+  <!-- END: Content-->
+  <!-- <div class="sidenav-overlay"></div> -->
+  <!-- <div class="drag-target"></div> -->
+  <!-- BEGIN: Footer-->
+  <%- include('../Layout/appfooter') %>
+
+  <%- include('../Layout/scriptFooter') %>
+
+  <!-- BEGIN: Page Vendor JS-->
+  <script src="../app-assets/vendors/js/charts/apexcharts.js"></script>
+  <!-- END: Page Vendor JS-->
+
+  <!-- BEGIN: Page JS-->
+  <script src="../app-scriptPage/page-user-index.js"></script>
+  <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

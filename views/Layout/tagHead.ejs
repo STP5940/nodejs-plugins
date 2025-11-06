@@ -1,0 +1,291 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui" />
+<meta name="description" content="<%= process.env.WEBSITENAME %> admin บริษัท ข้อมูลเครดิตแห่งชาติ" />
+<meta name="keywords" content="admin template <%= process.env.WEBSITENAME %>" />
+<meta name="author" content="<%= process.env.WEBSITENAME %>" />
+<link rel="shortcut icon" type="image/x-icon" href="/app-assets/images/ico/favicon.ico" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600" rel="stylesheet" />
+
+<!-- เปลี่ยนภาษา -->
+<script src="/translations.js"></script>
+
+<script>
+  loadTranslations("<%= use.language || 'th' %>").then(() => {
+    updateTranslations();
+    updateTranslations_placeholder();
+  });
+</script>
+<!-- สิ้นสุด เปลี่ยนภาษา -->
+
+<script src="/app-global/variable.js"></script>
+
+<!-- BEGIN: Vendor CSS-->
+<link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors.min.css" />
+<!-- END: Vendor CSS-->
+<!-- BEGIN: Theme CSS-->
+<link rel="stylesheet" type="text/css" href="/app-assets/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/app-assets/css/bootstrap-extended.css" />
+<link rel="stylesheet" type="text/css" href="/app-assets/css/colors.css" />
+<link rel="stylesheet" type="text/css" href="/app-assets/css/components.css" />
+<link rel="stylesheet" type="text/css" href="/app-assets/css/themes/dark-layout.css" />
+<!-- <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/bordered-layout.css"> -->
+<link rel="stylesheet" type="text/css" href="/app-assets/css/themes/semi-dark-layout.css" />
+<!-- BEGIN: Page CSS-->
+<link rel="stylesheet" type="text/css" href="/app-assets/css/core/menu/menu-types/horizontal-menu.css" />
+<!-- END: Page CSS-->
+<!-- BEGIN: Custom CSS-->
+<link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+<!-- END: Custom CSS-->
+
+<link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/forms/form-validation.css">
+
+<link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/dataTables.bootstrap5.min.css">
+
+<link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/extensions/ext-component-sweet-alerts.min.css">
+
+<link rel="manifest" href="/manifest.json">
+
+<style>
+  .form-label {
+    margin-top: 0.3rem;
+    font-size: 1rem !important;
+  }
+
+  .table thead th,
+  .table tfoot th {
+    font-size: 0.8rem !important;
+  }
+
+  /* กำหนดขนาดฟอนต์ของทุกเซลล์ใน DataTable */
+  table.dataTable td {
+    font-size: 12.5px;
+    /* กำหนดขนาดฟอนต์ที่ต้องการ */
+    font-family: 'Roboto Condensed', 'Arial Narrow', sans-serif;
+    font-stretch: condensed;
+    letter-spacing: -0.4px;
+    /* ลดช่องว่างระหว่างตัวอักษร */
+  }
+
+  /* ลดช่องว่างบนล่างระหว่าง td */
+  table.dataTable td {
+    padding-top: 3px;
+    /* ปรับช่องว่างด้านบน */
+    padding-bottom: 3px;
+    /* ปรับช่องว่างด้านล่าง */
+    padding-right: 3px;
+    /* ปรับช่องว่างด้านขวา */
+    padding-left: 8px;
+    /* ปรับช่องว่างด้านซ้าย */
+  }
+
+  /* ลดช่องว่างบนล่างระหว่าง td */
+  table.dataTable th {
+    padding-right: 8px;
+    /* ปรับช่องว่างด้านขวา */
+    padding-left: 8px;
+    /* ปรับช่องว่างด้านซ้าย */
+  }
+
+  /* Style for the loading overlay */
+  #loadingOverlay {
+    z-index: 1060;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #loadingOverlay.hidden {
+    display: none;
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #f3f3f3;
+    /* border-top: 6px solid #3498db; */
+    border-top: 6px solid #7367f0;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* แสงกระพิบในตาราง */
+  .blinking-row {
+    animation: blink-animation 1s infinite !important;
+  }
+
+  @keyframes blink-animation {
+    0% {
+      background-color: #ffb9633d;
+      /* สีพื้นหลังที่ต้องการให้แสดง */
+    }
+
+    50% {
+      /* background-color: transparent; */
+      /* พื้นหลังโปร่งแสงระหว่างการกระพิบ */
+
+      background-color: #ffb96320;
+    }
+
+    100% {
+      background-color: #ffb9633d;
+      /* สีพื้นหลังที่ต้องการให้แสดง */
+    }
+  }
+
+  /* สำหรับโหมดปกติ */
+  .cutom-striped tbody tr:nth-child(odd) {
+    background-color: #fafafc;
+  }
+
+  /* โหมดมืด */
+  .dark-layout .cutom-striped tbody tr:nth-child(odd) {
+    background-color: #242b3d;
+  }
+
+  /* แจ้งเตือนการออนไลน์/ออฟไลน์ */
+  .status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+  }
+
+  .status-online {
+    background-color: #31a24c;
+  }
+
+  .status-offline {
+    background-color: #e41e3f;
+  }
+
+  .toast {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .toast-header-offline {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+
+  .toast-header-online {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .dark-layout .toast-header-offline,
+  .dark-layout .toast-header-online {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .toast-body {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* สไตล์พื้นฐานสำหรับทุกขนาดหน้าจอ */
+  .toast-container {
+    position: fixed;
+    bottom: 13px;
+    z-index: 9999;
+  }
+
+  /* สำหรับหน้าจอขนาดใหญ่ (1200px ขึ้นไป) */
+  @media (min-width: 1200px) {
+    .toast-container {
+      padding-left: 28px;
+    }
+  }
+
+  /* สำหรับหน้าจอขนาดเล็ก (น้อยกว่า 1199px) */
+  @media (max-width: 1199px) {
+    .toast-container {
+      padding-left: 18px;
+    }
+  }
+
+  /* สำหรับหน้าจอขนาดใหญ่ (768px ขึ้นไป) */
+  @media (min-width: 768px) {
+    .toast-container {
+      left: 28px;
+      right: auto;
+      width: auto;
+    }
+
+    .toast {
+      width: 350px;
+    }
+  }
+
+  /* สำหรับหน้าจอขนาดเล็ก (น้อยกว่า 768px) */
+  @media (max-width: 767.98px) {
+    .toast-container {
+      left: 0;
+      right: 0;
+      padding: 0 17px;
+      width: 100%;
+    }
+
+    .toast {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  /* END แจ้งเตือนการออนไลน์/ออฟไลน์ */
+</style>
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" class="hidden">
+  <div class="spinner"></div>
+</div>
+
+
+<!-- Toast Container -->
+<div class="toast-container start-0">
+  <!-- Online Toast -->
+  <div id="onlineToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+    <div class="toast-header toast-header-online">
+      <strong class="me-auto">Connection Status</strong>
+      <small>Just now</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      <span class="status-indicator status-online"></span>
+      <strong>You are back online!</strong>
+      <p class="mb-0 mt-1 text-dark">Your connection has been restored.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container start-0">
+  <!-- Offline Toast -->
+  <div id="offlineToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+    <div class="toast-header toast-header-offline">
+      <strong class="me-auto">Connection Status</strong>
+      <small>Just now</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      <span class="status-indicator status-offline"></span>
+      <strong>You are currently offline.</strong>
+      <p class="mb-0 mt-1 text-dark">We'll notify you when you're back online.</p>
+    </div>
+  </div>
+</div>

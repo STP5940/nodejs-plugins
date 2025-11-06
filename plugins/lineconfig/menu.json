@@ -1,0 +1,9 @@
+{
+    "display": true,
+    "index": 6,
+    "code": "Lineconfig",
+    "title": "_line_account",
+    "icon": "/icons/line.svg",
+    "controller": "LineconfigController",
+    "url": ""
+}

@@ -1,0 +1,19 @@
+<svg
+    width="88"
+    height="87"
+    viewBox="0 0 88 87"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+>
+    <!-- กล่องรหัสผ่าน -->
+    <rect x="10" y="28" width="68" height="33" rx="4" fill="#E0E4E8" stroke="#C3C8CC" stroke-width="2" />
+
+    <!-- จุดรหัสผ่าน -->
+    <circle cx="29" cy="44" r="5" fill="#37474F" />
+    <circle cx="44" cy="44" r="5" fill="#37474F" />
+    <circle cx="59" cy="44" r="5" fill="#37474F" />
+
+    <!-- ไอคอนเครื่องหมายถูก -->
+    <circle cx="63" cy="64" r="17" fill="#4CAF50" />
+    <path d="M57 64L62 69L70 59" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

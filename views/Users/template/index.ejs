@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="loading <%= use.theme == 'sun' ? 'dark-layout' : '' %>" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Head-->
+
+<head>
+  <title><%= process.env.WEBSITENAME %> - Template</title>
+  <%- include(viewsRoot('/Layout/tagHead')) %>
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col>
+
+  <!-- BEGIN: Header-->
+
+
+  <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" data-nav="brand-center">
+    <%- include(viewsRoot('/Layout/appheader'), { Menuname: "_template" }) %>
+    <!-- _template = เปลี่ยนเป็นชื่อเมนู -->
+  </nav>
+  <!-- END: Header-->
+
+  <!-- BEGIN: Main Menu-->
+  <%- include(viewsRoot('/Layout/appmenu'), { Menuname: "_template" }) %>
+  <!-- _template = เปลี่ยนเป็นชื่อเมนู -->
+  <!-- END: Main Menu-->
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+      <%- include(viewsRoot('/Layout/appbreadcrumb'), { Menuname: "_template" }) %>
+      <!-- _template = เปลี่ยนเป็นชื่อเมนู -->
+
+      <div class="content-body">
+        <div class="row">
+          <div class="col-12">
+            <!-- template -->
+
+            <div class="card">
+              <div class="card-header border-bottom py-1">
+                <h4 class="card-title">
+                  Template ตัวอย่าง
+                </h4>
+              </div>
+              <div class="card-body pt-1">
+
+                <% if(messages.success){ %>
+                <div class="alert alert-success" role="alert">
+                  <h4 class="alert-heading">
+                    <i data-feather="check-circle" class="me-50"></i>
+                    <span data-language="_success_title">
+                      <!-- _error_title -->
+                    </span>
+                  </h4>
+                  <div class="alert-body">
+                    <ul class="ps-1 ms-25">
+                      <li data-language="<%= messages.success %>"></li>
+                    </ul>
+                  </div>
+                </div>
+                <% } %>
+
+                <% if(messages.error){ %>
+
+                <div class="alert alert-danger" role="alert">
+                  <h4 class="alert-heading">
+                    <!-- <i data-feather="x-circle" class="me-50"></i> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle me-50">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="15" y1="9" x2="9" y2="15"></line>
+                      <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                    <span data-language="_error_title">
+                      <!-- _error_title -->
+                    </span>
+                  </h4>
+                  <div class="alert-body">
+                    <ul class="ps-1 ms-25">
+                      <% messages.error.forEach(message => { %>
+                      <li data-language="<%= message %>"></li>
+                      <% }) %>
+                    </ul>
+                  </div>
+                </div>
+                <% } %>
+
+                <!-- form -->
+                <form class="validate-form" action="/user/security" method="post">
+                  <input type="hidden" class="form-control" name="_csrfToken" value="<%- csrfToken %>">
+                  <input hidden type="text" class="form-control" id="username" name="username" autocomplete="username" required>
+                  <div class="row">
+                    <div class="col-12 col-sm-6 mb-1">
+                      <label class="form-label" for="account-old-password" data-language="_current_password">
+                        <!-- รหัสผ่านปัจจุบัน -->
+                      </label>
+                      <div class="input-group form-password-toggle input-group-merge">
+                        <input type="password" class="form-control" id="password" name="password" autocomplete="current-password" data-language-placeholder="_enter_current_password" data-msg="Please current password" required />
+                        <div class="input-group-text cursor-pointer">
+                          <i data-feather="eye"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 col-sm-6 mb-1">
+                      <label class="form-label" for="account-new-password" data-language="_new_password">
+                        <!-- รหัสผ่านใหม่ -->
+                      </label>
+                      <div class="input-group form-password-toggle input-group-merge">
+                        <input type="password" class="form-control" id="new_password" name="new_password" autocomplete="new-password" data-language-placeholder="_enter_new_password" required />
+                        <div class="input-group-text cursor-pointer">
+                          <i data-feather="eye"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6 mb-1">
+                      <label class="form-label" for="account-retype-new-password" data-language="_retype_new_password">
+                        <!-- พิมพ์รหัสผ่านใหม่อีกครั้ง -->
+                      </label>
+                      <div class="input-group form-password-toggle input-group-merge">
+                        <!-- placeholder="Confirm your new password" -->
+                        <input type="password" class="form-control" id="confirm_new_password" name="confirm_new_password" autocomplete="new-password" data-language-placeholder="_confirm_new_password" required />
+                        <div class="input-group-text cursor-pointer"><i data-feather="eye"></i></div>
+                      </div>
+                    </div>
+
+                    <% if (use.changepassword == true) { %>
+                    <div class="col-12 col-sm-6 mb-1">
+                      <label class="form-label text-warning" for="account-new-password" data-language="_twofactor_form_app">
+                        <!-- รหัส 6 หลักที่ได้จากแอป 2FA Authenticator -->
+                      </label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="confirm_twofactor" name="confirm_twofactor" data-language-placeholder="_confirm_twofactor" />
+                      </div>
+                    </div>
+                    <% } %>
+
+                    <div class="col-12">
+                      <p class="fw-bolder">
+                        <span data-language="_password_requirements"></span>
+                        <!-- ข้อกำหนดรหัสผ่าน -->:
+                      </p>
+                      <ul class="ps-1 ms-25">
+                        <li class="mb-50" data-language="_password_min_long">
+                          <!-- Enter at least 10 characters. -->
+                        </li>
+                        <li class="mb-50" data-language="_password_lowercase">
+                          <!-- Must contain at least one lowercase letter (a-z). -->
+                        </li>
+                        <li class="mb-50" data-language="_password_uppercase">
+                          <!-- Must contain at least one uppercase letter (A-Z). -->
+                        </li>
+                        <li data-language="_password_character">
+                          <!-- Must contain at least 1 symbols or spaces. -->
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="col-12">
+                      <button type="submit" id="btnDisabled" class="btn btn-primary me-1 mt-1" data-language="_save_changes">
+                        <!-- Save changes -->
+                      </button>
+                      <button type="reset" class="btn btn-outline-secondary mt-1" data-language="_discard">
+                        <!-- Discard -->
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                <!--/ form -->
+              </div>
+            </div>
+
+            <!--/ template -->
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- END: Content-->
+  <!-- <div class="sidenav-overlay"></div> -->
+  <!-- <div class="drag-target"></div> -->
+  <!-- BEGIN: Footer-->
+  <%- include(viewsRoot('/Layout/appfooter')) %>
+
+  <%- include(viewsRoot('/Layout/scriptFooter')) %>
+
+  <!-- BEGIN: Page JS-->
+  <!-- <script src="../app-validateForm/page-user-template.js"></script>
+  <script src="../app-scriptPage/page-user-template.js"></script> -->
+  <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>
