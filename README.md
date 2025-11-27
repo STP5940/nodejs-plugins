@@ -147,6 +147,9 @@ $ redis-cli SMEMBERS usedTokens
 PONG
 ```
 
+## เครื่องมือในการจัดการ Redis UI
+[AnotherRedis Desktop Manager](https://github.com/qishibo/AnotherRedisDesktopManager/releases)
+
 ## เริ่มการทำงานโปรแกรม
 
 ```bash
