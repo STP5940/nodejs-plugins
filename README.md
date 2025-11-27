@@ -117,6 +117,8 @@ SESSION_REDIS=false
 
 ## ทดสอบใช้งาน Redis
 
+- ติดตั้ง [microsoftarchive/redis](https://github.com/microsoftarchive/redis/releases)
+
 ```bash
 $ redis-cli
 ```
@@ -148,6 +150,7 @@ PONG
 ```
 
 ## เครื่องมือในการจัดการ Redis UI
+
 [AnotherRedis Desktop Manager](https://github.com/qishibo/AnotherRedisDesktopManager/releases)
 
 ## เริ่มการทำงานโปรแกรม
